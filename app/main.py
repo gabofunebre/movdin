@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import and_, bindparam, func, select
 from sqlalchemy.orm import Session
@@ -30,6 +30,12 @@ def health():
 
 @app.post("/accounts", response_model=AccountOut)
 def create_account(payload: AccountIn, db: Session = Depends(get_db)):
+    existing = db.scalar(select(Account).where(Account.name == payload.name))
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Account name already exists",
+        )
     acc = Account(**payload.dict())
     db.add(acc)
     db.commit()
