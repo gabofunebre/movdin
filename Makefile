@@ -1,11 +1,10 @@
 # Helper Makefile para desarrollo y automatización
 
 APP_SVC ?= app
-DB_SVC ?= db
 DOCKER_COMPOSE ?= docker compose
 MSG ?= update
 
-.PHONY: help up down down-v start stop restart ps logs logs-db shell rebuild rebuild-v push pull prune run
+.PHONY: help up down down-v start stop restart ps logs shell rebuild rebuild-v push pull prune run
 
 help:
 	@echo "Comandos disponibles:"
@@ -19,7 +18,6 @@ help:
 	@echo ""
 	@echo "Logs y shell:"
 	@echo "  make logs      - Muestra logs de todos los contenedores"
-	@echo "  make logs-db   - Muestra logs del contenedor de base de datos"
 	@echo "  make shell     - Abre una shell bash en el contenedor principal"
 	@echo ""
 	@echo "Rebuild:"
@@ -58,11 +56,7 @@ ps:
 
 # Logs y shell
 logs:
-	-$(DOCKER_COMPOSE) logs -f || true
-
-logs-db:
-	-$(DOCKER_COMPOSE) logs -f $(DB_SVC) || true
-
+        -$(DOCKER_COMPOSE) logs -f || true
 shell:
 	$(DOCKER_COMPOSE) exec $(APP_SVC) /bin/bash
 
