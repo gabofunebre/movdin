@@ -3,6 +3,7 @@ export function renderTransaction(tbody, tx, accountMap) {
   const isIncome = tx.amount >= 0;
   tr.classList.add(isIncome ? 'fw-bold' : 'fst-italic');
   const tipo = isIncome ? 'Ingreso' : 'Egreso';
+
   const amount = Math.abs(tx.amount).toFixed(2);
   tr.innerHTML =
     `<td>${tx.date}</td>` +

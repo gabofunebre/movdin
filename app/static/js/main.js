@@ -32,7 +32,6 @@ function openModal(type) {
 
 document.getElementById('add-income').addEventListener('click', () => openModal('income'));
 document.getElementById('add-expense').addEventListener('click', () => openModal('expense'));
-
 container.addEventListener('scroll', () => {
   if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
     loadMore();
