@@ -4,14 +4,13 @@ services:
     hostname: movdin-app
     build: ./app
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/db_TA}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db_TA:5432/db_TA}
     expose:
       - "8000"
     networks:
       - net_TA
       - nginx_net
     restart: unless-stopped
-
 networks:
   net_TA:
     external: true
