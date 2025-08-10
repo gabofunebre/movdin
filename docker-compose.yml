@@ -1,27 +1,16 @@
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app
-      POSTGRES_DB: movdb
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app -d movdb"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-
   app:
     build: ./app
     environment:
-      DB_DSN: postgresql+psycopg://app:app@db:5432/movdb
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "5050:8000"
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/db_TA}
+    expose:
+      - "8000"
+    networks:
+      - net_TA
+      - nginx_net
 
-volumes:
-  db_data:
+networks:
+  net_TA:
+    external: true
+  nginx_net:
+    external: true

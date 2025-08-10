@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
 SQLAlchemy>=2
-psycopg[binary]
+psycopg2-binary
 pydantic
 aiofiles
