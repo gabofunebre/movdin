@@ -12,7 +12,6 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-
 from db import Base
 
 
