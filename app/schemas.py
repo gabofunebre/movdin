@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 from decimal import Decimal
-from typing import Literal
+
 from config.constants import Currency
 
 class AccountIn(BaseModel):
@@ -20,7 +20,6 @@ class TransactionCreate(BaseModel):
     date: date
     description: str = ""
     amount: Decimal
-    kind: Literal["ingreso", "egreso"]
     notes: str = ""
 
 
