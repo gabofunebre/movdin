@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func
 from typing import List, Dict
+from datetime import date
 
 from .db import Base, engine, get_db
 from .models import Account, Transaction
@@ -9,8 +11,16 @@ from .schemas import AccountIn, AccountOut, TxIn, TxOut
 
 app = FastAPI(title="Movimientos")
 
-# Crear tablas si no existen (mínimo para arrancar)
+# Crear tablas si no existen
 Base.metadata.create_all(bind=engine)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health():
@@ -26,8 +36,7 @@ def create_account(payload: AccountIn, db: Session = Depends(get_db)):
 
 @app.get("/accounts", response_model=List[AccountOut])
 def list_accounts(db: Session = Depends(get_db)):
-    rows = db.scalars(select(Account).order_by(Account.name)).all()
-    return rows
+    return db.scalars(select(Account).order_by(Account.name)).all()
 
 @app.post("/transactions", response_model=TxOut)
 def create_tx(payload: TxIn, db: Session = Depends(get_db)):
@@ -38,7 +47,7 @@ def create_tx(payload: TxIn, db: Session = Depends(get_db)):
     return tx
 
 @app.get("/transactions", response_model=List[TxOut])
-def list_txs(from_: str | None = None, to: str | None = None, account_id: int | None = None, db: Session = Depends(get_db)):
+def list_txs(from_: date | None = None, to: date | None = None, account_id: int | None = None, db: Session = Depends(get_db)):
     q = select(Transaction)
     if account_id:
         q = q.where(Transaction.account_id == account_id)

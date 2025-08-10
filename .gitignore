@@ -51,7 +51,7 @@ volumes/
 .idea/
 *.iml
 
-# Frontend (si agregás UI)
+# Frontend
 node_modules/
 .npm/
 .yarn/*

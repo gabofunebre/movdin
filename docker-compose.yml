@@ -21,7 +21,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "5050:8000"
+      - "8000:8000"
 
 volumes:
   db_data:

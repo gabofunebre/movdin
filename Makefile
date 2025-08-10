@@ -1,5 +1,3 @@
-# Helper Makefile para desarrollo y automatización
-
 APP_SVC ?= app
 DB_SVC ?= db
 DOCKER_COMPOSE ?= docker compose
