@@ -10,9 +10,11 @@ from sqlalchemy import (
     ForeignKey,
     Text,
     func,
+    Enum as SqlEnum,
 )
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from db import Base
+from constants import Currency
 
 
 class Account(Base):
@@ -20,6 +22,7 @@ class Account(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     opening_balance: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    currency: Mapped[Currency] = mapped_column(SqlEnum(Currency), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
