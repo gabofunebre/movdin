@@ -3,3 +3,4 @@ uvicorn[standard]
 SQLAlchemy>=2
 psycopg[binary]
 pydantic
+aiofiles

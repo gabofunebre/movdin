@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Movimientos</title>
+    <style>
+        body { font-family: sans-serif; margin:0; padding:0; display:flex; flex-direction:column; height:100vh; }
+        header, footer { background:#f0f0f0; padding:0.5rem; }
+        #table-container { flex:1; overflow-y:auto; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { padding:0.25rem; border-bottom:1px solid #ccc; }
+        #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center; }
+        #modal form { background:white; padding:1rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <button id="config-btn">Configuración</button>
+    </header>
+    <div id="table-container">
+        <table id="tx-table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                    <th>Cuenta</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <footer>
+        <button id="add-income">+ Ingreso</button>
+        <button id="add-expense">+ Egreso</button>
+    </footer>
+
+    <div id="modal">
+        <form id="tx-form">
+            <h3 id="form-title"></h3>
+            <label>Fecha <input type="date" name="date" required></label><br/>
+            <label>Concepto <input type="text" name="description"></label><br/>
+            <label>Monto <input type="number" step="0.01" name="amount" required></label><br/>
+            <label>Cuenta <select name="account_id"></select></label><br/>
+            <button type="submit">Guardar</button>
+            <button type="button" id="cancel-btn">Cancelar</button>
+        </form>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
