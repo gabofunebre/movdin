@@ -49,15 +49,23 @@ def list_accounts(db: Session = Depends(get_db)):
 
 @app.post("/transactions", response_model=TransactionOut)
 def create_tx(payload: TransactionCreate, db: Session = Depends(get_db)):
-    data = payload.dict()
-    amount = data.pop("amount")
-    kind = data.pop("kind")
-    signed = -abs(amount) if kind == "egreso" else abs(amount)
-    tx = Transaction(amount=signed, **data)
+    tx = Transaction(**payload.dict())
     db.add(tx)
     db.commit()
     db.refresh(tx)
     return tx
+
+
+@app.get("/transactions", response_model=List[TransactionOut])
+def list_transactions(limit: int = 50, offset: int = 0, db: Session = Depends(get_db)):
+    stmt = (
+        select(Transaction)
+        .order_by(Transaction.date.desc(), Transaction.id.desc())
+        .limit(limit)
+        .offset(offset)
+    )
+    rows = db.scalars(stmt).all()
+    return rows
 
 @app.get("/accounts/balances", response_model=List[AccountBalance])
 def account_balances(to_date: date | None = None, db: Session = Depends(get_db)):
