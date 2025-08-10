@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from datetime import date
+from decimal import Decimal
+from typing import Literal
 from constants import Currency
 
 class AccountIn(BaseModel):
     name: str
-    opening_balance: float = 0.0
+    opening_balance: Decimal = 0
     currency: Currency
     is_active: bool = True
 
@@ -13,14 +15,37 @@ class AccountOut(AccountIn):
     class Config:
         from_attributes = True
 
-class TxIn(BaseModel):
+class TransactionCreate(BaseModel):
+    account_id: int
     date: date
     description: str = ""
-    amount: float
+    amount: Decimal
+    kind: Literal["ingreso", "egreso"]
     notes: str = ""
-    account_id: int
 
-class TxOut(TxIn):
+
+class TransactionOut(BaseModel):
     id: int
+    account_id: int
+    date: date
+    description: str
+    amount: Decimal
+    notes: str
+
     class Config:
         from_attributes = True
+
+
+class TransactionWithBalance(TransactionOut):
+    running_balance: Decimal
+
+
+class AccountBalance(BaseModel):
+    account_id: int
+    name: str
+    currency: Currency
+    balance: Decimal
+
+
+class BalanceOut(BaseModel):
+    balance: Decimal
