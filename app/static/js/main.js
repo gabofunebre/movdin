@@ -44,6 +44,7 @@ container.addEventListener('scroll', () => {
 form.addEventListener('submit', async e => {
   e.preventDefault();
   if (!form.reportValidity()) return;
+
   const data = new FormData(form);
   let amount = parseFloat(data.get('amount'));
   amount = form.dataset.type === 'expense' ? -Math.abs(amount) : Math.abs(amount);
@@ -54,6 +55,7 @@ form.addEventListener('submit', async e => {
     notes: '',
     account_id: parseInt(data.get('account_id'), 10)
   };
+
   const ok = await createTransaction(payload);
   alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
   if (ok) {
