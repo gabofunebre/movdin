@@ -9,9 +9,20 @@ export async function fetchTransactions(limit, offset) {
 }
 
 export async function createTransaction(payload) {
-  await fetch('/transactions', {
+
+  const res = await fetch('/transactions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
+  return res.ok;
+}
+
+export async function createAccount(payload) {
+  const res = await fetch('/accounts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  return res.ok;
 }

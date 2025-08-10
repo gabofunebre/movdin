@@ -6,6 +6,7 @@ const container = document.getElementById('table-container');
 const modalEl = document.getElementById('txModal');
 const txModal = new bootstrap.Modal(modalEl);
 const form = document.getElementById('tx-form');
+const alertBox = document.getElementById('tx-alert');
 
 let offset = 0;
 const limit = 50;
@@ -27,11 +28,13 @@ function openModal(type) {
   document.getElementById('form-title').textContent = type === 'income' ? 'Nuevo Ingreso' : 'Nuevo Egreso';
   populateAccounts(form.account_id, accounts);
   form.dataset.type = type;
+  alertBox.classList.add('d-none');
   txModal.show();
 }
 
 document.getElementById('add-income').addEventListener('click', () => openModal('income'));
 document.getElementById('add-expense').addEventListener('click', () => openModal('expense'));
+
 container.addEventListener('scroll', () => {
   if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
     loadMore();
@@ -40,6 +43,8 @@ container.addEventListener('scroll', () => {
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
+  if (!form.reportValidity()) return;
+
   const data = new FormData(form);
   let amount = parseFloat(data.get('amount'));
   amount = form.dataset.type === 'expense' ? -Math.abs(amount) : Math.abs(amount);
@@ -50,11 +55,23 @@ form.addEventListener('submit', async e => {
     notes: '',
     account_id: parseInt(data.get('account_id'), 10)
   };
-  await createTransaction(payload);
-  txModal.hide();
-  tbody.innerHTML = '';
-  offset = 0;
-  await loadMore();
+
+  const ok = await createTransaction(payload);
+  alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+  if (ok) {
+    alertBox.classList.add('alert-success');
+    alertBox.textContent = 'Movimiento guardado';
+    tbody.innerHTML = '';
+    offset = 0;
+    await loadMore();
+    setTimeout(() => {
+      txModal.hide();
+      alertBox.classList.add('d-none');
+    }, 1000);
+  } else {
+    alertBox.classList.add('alert-danger');
+    alertBox.textContent = 'Error al guardar';
+  }
 });
 
 (async function init() {

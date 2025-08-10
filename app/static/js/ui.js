@@ -3,7 +3,6 @@ export function renderTransaction(tbody, tx, accountMap) {
   const isIncome = tx.amount >= 0;
   tr.classList.add(isIncome ? 'fw-bold' : 'fst-italic');
   const tipo = isIncome ? 'Ingreso' : 'Egreso';
-
   const amount = Math.abs(tx.amount).toFixed(2);
   tr.innerHTML =
     `<td>${tx.date}</td>` +
@@ -19,7 +18,16 @@ export function populateAccounts(select, accounts) {
   accounts.forEach(acc => {
     const opt = document.createElement('option');
     opt.value = acc.id;
-    opt.textContent = acc.name;
+    opt.textContent = `${acc.name} (${acc.currency})`;
     select.appendChild(opt);
   });
+}
+
+export function renderAccount(tbody, account) {
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    `<td>${account.name}</td>` +
+    `<td>${account.currency}</td>` +
+    `<td>${Number(account.opening_balance).toFixed(2)}</td>`;
+  tbody.appendChild(tr);
 }
