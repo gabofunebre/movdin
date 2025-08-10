@@ -1,5 +1,7 @@
 services:
   app:
+    container_name: movdin-app
+    hostname: movdin-app
     build: ./app
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/db_TA}
@@ -8,6 +10,7 @@ services:
     networks:
       - net_TA
       - nginx_net
+    restart: unless-stopped
 
 networks:
   net_TA:

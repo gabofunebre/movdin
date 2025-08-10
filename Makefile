@@ -56,7 +56,8 @@ ps:
 
 # Logs y shell
 logs:
-        -$(DOCKER_COMPOSE) logs -f || true
+	-$(DOCKER_COMPOSE) logs -f || true
+
 shell:
 	$(DOCKER_COMPOSE) exec $(APP_SVC) /bin/bash
 
