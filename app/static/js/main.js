@@ -54,6 +54,7 @@ form.addEventListener('submit', async e => {
     notes: '',
     account_id: parseInt(data.get('account_id'), 10)
   };
+
   const ok = await createTransaction(payload);
   alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
   if (ok) {
