@@ -20,7 +20,7 @@ class Base(DeclarativeBase):
 
 def init_db() -> None:
     """Create the service schema and tables if they do not exist."""
-    import app.models  # register models
+    import models  # register models
 
     with engine.begin() as conn:
         if engine.dialect.name == "postgresql":
