@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
-from constants import Currency
+from app.constants import Currency
 
 class AccountIn(BaseModel):
     name: str

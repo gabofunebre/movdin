@@ -1,17 +1,19 @@
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-from sqlalchemy import select, func
-from typing import List, Dict
+from typing import Dict, List
 from pathlib import Path
-from db import Base, engine, get_db
-from models import Account, Transaction
-from schemas import AccountIn, AccountOut, TxIn, TxOut
+from app.db import get_db, init_db
+from app.models import Account, Transaction
+from app.schemas import AccountIn, AccountOut, TxIn, TxOut
 
 app = FastAPI(title="Movimientos")
 
-# Crear tablas si no existen (mínimo para arrancar)
-Base.metadata.create_all(bind=engine)
+
+@app.on_event("startup")
+def on_startup() -> None:
+    init_db()
 
 @app.get("/health")
 def health():

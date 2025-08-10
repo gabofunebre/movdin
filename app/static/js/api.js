@@ -9,7 +9,6 @@ export async function fetchTransactions(limit, offset) {
 }
 
 export async function createTransaction(payload) {
-
   const res = await fetch('/transactions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

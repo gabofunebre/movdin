@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy import MetaData, create_engine, text
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 import os
 
@@ -8,11 +8,26 @@ DB_DSN = os.getenv("DATABASE_URL") or os.getenv("DB_DSN")
 if not DB_DSN:
     raise RuntimeError("DATABASE_URL not set")
 
-engine = create_engine(DB_DSN, future=True)
+SCHEMA_NAME = os.getenv("DB_SCHEMA", "movdin")
+
+engine = create_engine(DB_DSN, future=True, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 
+
 class Base(DeclarativeBase):
-    pass
+    metadata = MetaData(schema=SCHEMA_NAME)
+
+
+def init_db() -> None:
+    """Create the service schema and tables if they do not exist."""
+    import app.models  # register models
+
+    with engine.begin() as conn:
+        if engine.dialect.name == "postgresql":
+            conn.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{SCHEMA_NAME}"'))
+
+    Base.metadata.create_all(bind=engine)
+
 
 def get_db():
     db = SessionLocal()

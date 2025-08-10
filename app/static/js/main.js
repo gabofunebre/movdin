@@ -44,7 +44,6 @@ container.addEventListener('scroll', () => {
 form.addEventListener('submit', async e => {
   e.preventDefault();
   if (!form.reportValidity()) return;
-
   const data = new FormData(form);
   let amount = parseFloat(data.get('amount'));
   amount = form.dataset.type === 'expense' ? -Math.abs(amount) : Math.abs(amount);
