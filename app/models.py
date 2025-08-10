@@ -14,8 +14,8 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.db import Base
-from app.constants import Currency
+from db import Base
+from constants import Currency
 
 class Account(Base):
     __tablename__ = "accounts"

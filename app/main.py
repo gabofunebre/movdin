@@ -4,9 +4,9 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from typing import Dict, List
 from pathlib import Path
-from app.db import get_db, init_db
-from app.models import Account, Transaction
-from app.schemas import AccountIn, AccountOut, TxIn, TxOut
+from db import get_db, init_db
+from models import Account, Transaction
+from schemas import AccountIn, AccountOut, TxIn, TxOut
 
 app = FastAPI(title="Movimientos")
 
