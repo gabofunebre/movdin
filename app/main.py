@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
 from pathlib import Path
-from db import get_db, init_db
+from config.db import get_db, init_db
 from models import Account, Transaction
 from schemas import (
     AccountIn,
@@ -153,7 +153,13 @@ def account_transactions(
     ]
 
 app.mount(
-    "/",
-    StaticFiles(directory=Path(__file__).parent / "static", html=True),
+    "/static",
+    StaticFiles(directory=Path(__file__).parent / "static"),
     name="static",
+)
+
+app.mount(
+    "/",
+    StaticFiles(directory=Path(__file__).parent / "templates", html=True),
+    name="templates",
 )

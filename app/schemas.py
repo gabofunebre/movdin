@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import date
 from decimal import Decimal
 from typing import Literal
-from constants import Currency
+from config.constants import Currency
 
 class AccountIn(BaseModel):
     name: str
