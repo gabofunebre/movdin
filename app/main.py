@@ -4,16 +4,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, func
 from typing import List, Dict
 from pathlib import Path
-
-# Allow running both as part of a package (``app``) or as standalone module
-try:  # pragma: no cover - runtime import flexibility
-    from .db import Base, engine, get_db
-    from .models import Account, Transaction
-    from .schemas import AccountIn, AccountOut, TxIn, TxOut
-except ImportError:  # Running without package context
-    from db import Base, engine, get_db
-    from models import Account, Transaction
-    from schemas import AccountIn, AccountOut, TxIn, TxOut
+from db import Base, engine, get_db
+from models import Account, Transaction
+from schemas import AccountIn, AccountOut, TxIn, TxOut
 
 app = FastAPI(title="Movimientos")
 
