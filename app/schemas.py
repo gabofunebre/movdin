@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 from datetime import date
+from app.constants import Currency
 
 class AccountIn(BaseModel):
     name: str
     opening_balance: float = 0.0
+    currency: Currency
     is_active: bool = True
 
 class AccountOut(AccountIn):
