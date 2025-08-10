@@ -1,6 +1,10 @@
 from sqlalchemy import Column, Integer, String, Numeric, Boolean, Date, ForeignKey, Text, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from .db import Base
+# Allow using the models both as part of a package or standalone module
+try:  # pragma: no cover
+    from .db import Base
+except ImportError:  # pragma: no cover
+    from db import Base
 
 class Account(Base):
     __tablename__ = "accounts"
