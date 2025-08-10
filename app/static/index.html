@@ -7,9 +7,27 @@
   <link rel="stylesheet" href="css/layout.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
-  <header class="bg-light p-2">
-    <button id="config-btn" class="btn btn-secondary">Configuración</button>
+  <header class="navbar navbar-light bg-light p-2">
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="d-flex gap-3 ms-auto">
+      <button id="add-income" class="btn btn-success">+ Ingreso</button>
+      <button id="add-expense" class="btn btn-danger">+ Egreso</button>
+    </div>
   </header>
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="sideMenu" aria-labelledby="sideMenuLabel">
+    <div class="offcanvas-header">
+      <h5 id="sideMenuLabel" class="offcanvas-title">Menú</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="list-unstyled">
+        <li><a href="/config" class="text-decoration-none">Configuración</a></li>
+      </ul>
+    </div>
+  </div>
+
   <div id="table-container" class="flex-grow-1 overflow-auto">
     <table id="tx-table" class="table table-striped mb-0">
       <thead>
@@ -24,10 +42,6 @@
       <tbody></tbody>
     </table>
   </div>
-  <footer class="bg-light p-2 d-flex gap-2">
-    <button id="add-income" class="btn btn-success">+ Ingreso</button>
-    <button id="add-expense" class="btn btn-danger">+ Egreso</button>
-  </footer>
 
   <div class="modal fade" id="txModal" tabindex="-1">
     <div class="modal-dialog">
