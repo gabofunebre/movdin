@@ -18,7 +18,7 @@ export function renderTransaction(tbody, tx, accountMap) {
   const amountClass = isIncome ? 'text-start' : 'text-end';
   const amountColor = isIncome ? 'rgb(40,150,20)' : 'rgb(170,10,10)';
   tr.innerHTML =
-    `<td>${formattedDate}</td>` +
+    `<td class="text-center">${formattedDate}</td>` +
     `<td${descStyle}>${tx.description}</td>` +
     `<td class="${amountClass}" style="color:${amountColor}">${amount}</td>` +
     `<td class="text-center" style="color:${accColor}">${accName}</td>`;
