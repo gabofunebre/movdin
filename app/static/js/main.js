@@ -1,5 +1,5 @@
 import { fetchAccounts, fetchTransactions, createTransaction } from './api.js';
-import { renderTransaction, populateAccounts } from './ui.js';
+import { renderTransaction, populateAccounts, showOverlay, hideOverlay } from './ui.js';
 
 const tbody = document.querySelector('#tx-table tbody');
 const container = document.getElementById('table-container');
@@ -29,6 +29,8 @@ function openModal(type) {
   populateAccounts(form.account_id, accounts);
   form.dataset.type = type;
   alertBox.classList.add('d-none');
+  const today = new Date().toISOString().split('T')[0];
+  form.date.max = today;
   txModal.show();
 }
 
@@ -54,10 +56,19 @@ form.addEventListener('submit', async e => {
     notes: '',
     account_id: parseInt(data.get('account_id'), 10)
   };
+  const today = new Date().toISOString().split('T')[0];
+  if (payload.date > today) {
+    alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+    alertBox.classList.add('alert-danger');
+    alertBox.textContent = 'La fecha no puede ser futura';
+    return;
+  }
 
-  const ok = await createTransaction(payload);
+  showOverlay();
+  const result = await createTransaction(payload);
+  hideOverlay();
   alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
-  if (ok) {
+  if (result.ok) {
     alertBox.classList.add('alert-success');
     alertBox.textContent = 'Movimiento guardado';
     tbody.innerHTML = '';
@@ -69,7 +80,7 @@ form.addEventListener('submit', async e => {
     }, 1000);
   } else {
     alertBox.classList.add('alert-danger');
-    alertBox.textContent = 'Error al guardar';
+    alertBox.textContent = result.error || 'Error al guardar';
   }
 });
 

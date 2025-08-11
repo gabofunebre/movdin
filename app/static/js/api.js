@@ -14,7 +14,13 @@ export async function createTransaction(payload) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
-  return res.ok;
+  if (res.ok) return { ok: true };
+  let error = 'Error al guardar';
+  try {
+    const data = await res.json();
+    error = data.detail || error;
+  } catch (_) {}
+  return { ok: false, error };
 }
 
 export async function createAccount(payload) {
@@ -23,5 +29,11 @@ export async function createAccount(payload) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
-  return res.ok;
+  if (res.ok) return { ok: true };
+  let error = 'Error al guardar';
+  try {
+    const data = await res.json();
+    error = data.detail || error;
+  } catch (_) {}
+  return { ok: false, error };
 }

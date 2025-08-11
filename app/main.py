@@ -49,6 +49,11 @@ def list_accounts(db: Session = Depends(get_db)):
 
 @app.post("/transactions", response_model=TransactionOut)
 def create_tx(payload: TransactionCreate, db: Session = Depends(get_db)):
+    if payload.date > date.today():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No se permiten fechas futuras",
+        )
     tx = Transaction(**payload.dict())
     db.add(tx)
     db.commit()

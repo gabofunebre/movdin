@@ -31,3 +31,13 @@ export function renderAccount(tbody, account) {
     `<td>${Number(account.opening_balance).toFixed(2)}</td>`;
   tbody.appendChild(tr);
 }
+
+const overlayEl = document.getElementById('overlay');
+
+export function showOverlay() {
+  overlayEl.classList.remove('d-none');
+}
+
+export function hideOverlay() {
+  overlayEl.classList.add('d-none');
+}
