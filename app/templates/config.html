@@ -11,9 +11,6 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="ms-auto">
-      <button id="add-account" class="btn btn-primary">Agregar cuenta</button>
-    </div>
   </header>
   <div class="offcanvas offcanvas-start" tabindex="-1" id="sideMenu" aria-labelledby="sideMenuLabel">
     <div class="offcanvas-header">
@@ -27,12 +24,13 @@
     </div>
   </div>
   <main class="container mt-3">
-    <table id="account-table" class="table table-striped">
+    <table id="account-table" class="table table-sm border border-secondary w-auto">
       <thead>
-        <tr><th>Nombre</th><th>Moneda</th><th>Saldo inicial</th></tr>
+        <tr><th>Nombre</th><th>Moneda</th><th>Acciones</th></tr>
       </thead>
       <tbody></tbody>
     </table>
+    <button id="add-account" class="btn btn-primary mt-2">Agregar cuenta</button>
   </main>
   <div class="modal fade" id="accountModal" tabindex="-1">
     <div class="modal-dialog">
@@ -43,6 +41,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
+            <input type="hidden" name="id">
             <div class="mb-3">
               <label class="form-label">Nombre
                 <input type="text" name="name" class="form-control" required>
