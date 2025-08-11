@@ -52,3 +52,10 @@ class Transaction(Base):
     )
 
     account = relationship("Account", back_populates="transactions")
+
+
+class Tax(Base):
+    __tablename__ = "taxes"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    rate: Mapped[Decimal] = mapped_column(Numeric(5, 2), nullable=False)

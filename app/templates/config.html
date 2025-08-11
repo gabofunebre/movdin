@@ -20,7 +20,9 @@
     </div>
     <div class="offcanvas-body">
       <ul class="list-unstyled">
-        <li><a href="/" class="text-decoration-none">Inicio</a></li>
+        <li class="mb-2"><a href="/" class="text-decoration-none fs-5"><i class="bi bi-house me-2"></i>Inicio</a></li>
+        <li class="mb-2"><a href="/totals.html" class="text-decoration-none fs-5"><i class="bi bi-graph-up me-2"></i>Totales</a></li>
+        <li><a href="/config.html" class="text-decoration-none fs-5"><i class="bi bi-gear me-2"></i>Configuración</a></li>
       </ul>
     </div>
   </div>
@@ -39,6 +41,7 @@
         <tbody></tbody>
       </table>
       <button id="add-account" class="btn btn-primary mt-2 shadow-sm">Agregar cuenta</button>
+
     </div>
   </main>
   <div class="modal fade" id="accountModal" tabindex="-1">
@@ -77,6 +80,73 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="confirm-yes">Eliminar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="taxModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="tax-form">
+          <div class="modal-header">
+            <h5 class="modal-title">Nuevo impuesto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id">
+            <div class="mb-3">
+              <label class="form-label">Nombre
+                <input type="text" name="name" class="form-control" required>
+              </label>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Monto %
+                <input type="number" step="0.01" name="rate" class="form-control" required>
+              </label>
+            </div>
+            <div id="tax-alert" class="alert d-none" role="alert"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirmTaxModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-tax-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="confirm-tax-yes">Eliminar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
       </div>
     </div>
   </div>

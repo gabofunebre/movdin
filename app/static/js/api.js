@@ -1,10 +1,15 @@
-export async function fetchAccounts() {
-  const res = await fetch('/accounts');
+export async function fetchAccounts(includeInactive = false) {
+  const res = await fetch(`/accounts?include_inactive=${includeInactive}`);
   return res.json();
 }
 
 export async function fetchTransactions(limit, offset) {
   const res = await fetch(`/transactions?limit=${limit}&offset=${offset}`);
+  return res.json();
+}
+
+export async function fetchAccountBalances() {
+  const res = await fetch('/accounts/balances');
   return res.json();
 }
 
@@ -55,6 +60,52 @@ export async function updateAccount(id, payload) {
 
 export async function deleteAccount(id) {
   const res = await fetch(`/accounts/${id}`, { method: 'DELETE' });
+  if (res.ok) return { ok: true };
+  let error = 'Error al eliminar';
+  try {
+    const data = await res.json();
+    error = data.detail || error;
+  } catch (_) {}
+  return { ok: false, error };
+}
+
+export async function fetchTaxes() {
+  const res = await fetch('/taxes');
+  return res.json();
+}
+
+export async function createTax(payload) {
+  const res = await fetch('/taxes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (res.ok) return { ok: true };
+  let error = 'Error al guardar';
+  try {
+    const data = await res.json();
+    error = data.detail || error;
+  } catch (_) {}
+  return { ok: false, error };
+}
+
+export async function updateTax(id, payload) {
+  const res = await fetch(`/taxes/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (res.ok) return { ok: true };
+  let error = 'Error al guardar';
+  try {
+    const data = await res.json();
+    error = data.detail || error;
+  } catch (_) {}
+  return { ok: false, error };
+}
+
+export async function deleteTax(id) {
+  const res = await fetch(`/taxes/${id}`, { method: 'DELETE' });
   if (res.ok) return { ok: true };
   let error = 'Error al eliminar';
   try {
