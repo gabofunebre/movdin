@@ -45,20 +45,25 @@ function populateCurrencies() {
   });
 }
 
-addBtn.addEventListener('click', () => {
-  form.reset();
-  populateCurrencies();
-  idField.value = '';
-  alertBox.classList.add('d-none');
-  colorInput.value = '#000000';
-  colorBtn.style.color = '#000000';
-  modalTitle.textContent = 'Nueva cuenta';
-  accModal.show();
-});
+  addBtn.addEventListener('click', () => {
+    form.reset();
+    populateCurrencies();
+    idField.value = '';
+    alertBox.classList.add('d-none');
+    colorInput.value = '#000000';
+    colorBtn.style.color = '#000000';
+    modalTitle.textContent = 'Nueva cuenta';
+    accModal.show();
+  });
 
-colorBtn.addEventListener('click', () => colorInput.click());
+  colorBtn.addEventListener('click', () => {
+    const rect = colorBtn.getBoundingClientRect();
+    colorInput.style.left = `${rect.left}px`;
+    colorInput.style.top = `${rect.bottom}px`;
+    colorInput.click();
+  });
+
 colorInput.addEventListener('input', e => {
-
   colorBtn.style.color = e.target.value;
 });
 
