@@ -29,8 +29,8 @@ export function renderAccount(tbody, account, onEdit, onDelete) {
     `<td>${account.name}</td>` +
     `<td>${account.currency}</td>` +
     `<td class="text-nowrap">` +
-    `<button class="btn btn-sm btn-secondary me-2">Editar</button>` +
-    `<button class="btn btn-sm btn-danger">Eliminar</button>` +
+    `<button class="btn btn-sm btn-outline-secondary me-2" title="Editar"><i class="bi bi-pencil"></i></button>` +
+    `<button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-x"></i></button>` +
     `</td>`;
   const [editBtn, delBtn] = tr.querySelectorAll('button');
   if (onEdit) editBtn.addEventListener('click', () => onEdit(account));
