@@ -10,6 +10,9 @@ const addBtn = document.getElementById('add-account');
 const alertBox = document.getElementById('acc-alert');
 const currencySelect = form.currency;
 const idField = form.querySelector('input[name="id"]');
+const colorInput = form.querySelector('input[name="color"]');
+const colorBtn = document.getElementById('color-btn');
+const modalTitle = modalEl.querySelector('.modal-title');
 let accounts = [];
 
 function populateCurrencies() {
@@ -27,20 +30,27 @@ addBtn.addEventListener('click', () => {
   populateCurrencies();
   idField.value = '';
   alertBox.classList.add('d-none');
+  colorInput.value = '#ffffff';
+  colorBtn.style.backgroundColor = '#ffffff';
+  modalTitle.textContent = 'Nueva cuenta';
   accModal.show();
+});
+
+colorBtn.addEventListener('click', () => colorInput.click());
+colorInput.addEventListener('input', e => {
+  colorBtn.style.backgroundColor = e.target.value;
 });
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
   if (!form.reportValidity()) return;
   const data = new FormData(form);
-  const existing = accounts.find(a => a.id === parseInt(idField.value, 10));
   const payload = {
     name: data.get('name'),
     currency: data.get('currency'),
     opening_balance: parseFloat(data.get('opening_balance') || '0'),
     is_active: true,
-    color: existing ? existing.color : '#000000'
+    color: data.get('color') || '#000000'
   };
   showOverlay();
   let result;
@@ -64,7 +74,7 @@ form.addEventListener('submit', async e => {
 
 async function loadAccounts() {
   accounts = await fetchAccounts();
-  accounts.forEach(acc => renderAccount(tbody, acc, startEdit, removeAccount, changeColor));
+  accounts.forEach(acc => renderAccount(tbody, acc, startEdit, removeAccount));
 }
 
 
@@ -75,7 +85,10 @@ function startEdit(acc) {
   form.currency.value = acc.currency;
   form.opening_balance.value = acc.opening_balance;
   idField.value = acc.id;
+  colorInput.value = acc.color;
+  colorBtn.style.backgroundColor = acc.color;
   alertBox.classList.add('d-none');
+  modalTitle.textContent = 'Editar cuenta';
   accModal.show();
 }
 
@@ -89,24 +102,6 @@ async function removeAccount(acc) {
     await loadAccounts();
   } else {
     alert(result.error || 'Error al eliminar');
-  }
-}
-
-async function changeColor(acc, color) {
-  const payload = {
-    name: acc.name,
-    currency: acc.currency,
-    opening_balance: acc.opening_balance,
-    is_active: acc.is_active,
-    color
-  };
-  showOverlay();
-  const result = await updateAccount(acc.id, payload);
-  hideOverlay();
-  if (result.ok) {
-    acc.color = color;
-  } else {
-    alert(result.error || 'Error al guardar color');
   }
 }
 

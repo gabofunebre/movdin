@@ -28,9 +28,13 @@
     <h2 class="mb-3">Cuentas</h2>
     <div class="w-75 mx-auto">
 
-      <table id="account-table" class="table table-striped table-bordered border-secondary rounded overflow-hidden shadow-sm">
-        <thead>
-          <tr><th>Nombre</th><th>Moneda</th><th>Acciones</th></tr>
+      <table id="account-table" class="table table-striped table-borderless mb-0 shadow-sm">
+        <thead class="table-secondary">
+          <tr>
+            <th class="text-center fw-bold">Nombre</th>
+            <th class="text-center fw-bold">Moneda</th>
+            <th class="text-center fw-bold">Acciones</th>
+          </tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -61,6 +65,11 @@
               <label class="form-label">Saldo inicial
                 <input type="number" step="0.01" name="opening_balance" class="form-control" value="0">
               </label>
+            </div>
+            <div class="mb-3">
+              <label class="form-label d-block">Color</label>
+              <input type="color" name="color" class="d-none">
+              <button type="button" id="color-btn" class="btn btn-light border border-secondary rounded-pill px-4">Color</button>
             </div>
             <div id="acc-alert" class="alert d-none" role="alert"></div>
           </div>
