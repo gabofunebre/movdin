@@ -23,12 +23,18 @@ export function populateAccounts(select, accounts) {
   });
 }
 
-export function renderAccount(tbody, account) {
+export function renderAccount(tbody, account, onEdit, onDelete) {
   const tr = document.createElement('tr');
   tr.innerHTML =
     `<td>${account.name}</td>` +
     `<td>${account.currency}</td>` +
-    `<td>${Number(account.opening_balance).toFixed(2)}</td>`;
+    `<td class="text-nowrap">` +
+    `<button class="btn btn-sm btn-secondary me-2">Editar</button>` +
+    `<button class="btn btn-sm btn-danger">Eliminar</button>` +
+    `</td>`;
+  const [editBtn, delBtn] = tr.querySelectorAll('button');
+  if (onEdit) editBtn.addEventListener('click', () => onEdit(account));
+  if (onDelete) delBtn.addEventListener('click', () => onDelete(account));
   tbody.appendChild(tr);
 }
 

@@ -1,4 +1,4 @@
-import { fetchAccounts, createAccount } from './api.js';
+import { fetchAccounts, createAccount, updateAccount, deleteAccount } from './api.js';
 import { renderAccount, showOverlay, hideOverlay } from './ui.js';
 import { CURRENCIES } from './constants.js';
 
@@ -9,6 +9,7 @@ const form = document.getElementById('account-form');
 const addBtn = document.getElementById('add-account');
 const alertBox = document.getElementById('acc-alert');
 const currencySelect = form.currency;
+const idField = form.querySelector('input[name="id"]');
 
 function populateCurrencies() {
   currencySelect.innerHTML = '';
@@ -23,6 +24,7 @@ function populateCurrencies() {
 addBtn.addEventListener('click', () => {
   form.reset();
   populateCurrencies();
+  idField.value = '';
   alertBox.classList.add('d-none');
   accModal.show();
 });
@@ -38,7 +40,12 @@ form.addEventListener('submit', async e => {
     is_active: true
   };
   showOverlay();
-  const result = await createAccount(payload);
+  let result;
+  if (idField.value) {
+    result = await updateAccount(idField.value, payload);
+  } else {
+    result = await createAccount(payload);
+  }
   hideOverlay();
   alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
   if (result.ok) {
@@ -54,7 +61,32 @@ form.addEventListener('submit', async e => {
 
 async function loadAccounts() {
   const accounts = await fetchAccounts();
-  accounts.forEach(acc => renderAccount(tbody, acc));
+  accounts.forEach(acc => renderAccount(tbody, acc, startEdit, removeAccount));
+}
+
+
+function startEdit(acc) {
+  form.reset();
+  populateCurrencies();
+  form.name.value = acc.name;
+  form.currency.value = acc.currency;
+  form.opening_balance.value = acc.opening_balance;
+  idField.value = acc.id;
+  alertBox.classList.add('d-none');
+  accModal.show();
+}
+
+async function removeAccount(acc) {
+  if (!confirm('¿Eliminar cuenta?')) return;
+  showOverlay();
+  const result = await deleteAccount(acc.id);
+  hideOverlay();
+  if (result.ok) {
+    tbody.innerHTML = '';
+    await loadAccounts();
+  } else {
+    alert(result.error || 'Error al eliminar');
+  }
 }
 
 loadAccounts();

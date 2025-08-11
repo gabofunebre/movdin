@@ -47,6 +47,40 @@ def list_accounts(db: Session = Depends(get_db)):
     rows = db.scalars(select(Account).order_by(Account.name)).all()
     return rows
 
+
+@app.put("/accounts/{account_id}", response_model=AccountOut)
+def update_account(account_id: int, payload: AccountIn, db: Session = Depends(get_db)):
+    acc = db.get(Account, account_id)
+    if not acc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Account not found"
+        )
+    existing = db.scalar(
+        select(Account).where(Account.name == payload.name, Account.id != account_id)
+    )
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Account name already exists",
+        )
+    for field, value in payload.dict().items():
+        setattr(acc, field, value)
+    db.commit()
+    db.refresh(acc)
+    return acc
+
+
+@app.delete("/accounts/{account_id}")
+def delete_account(account_id: int, db: Session = Depends(get_db)):
+    acc = db.get(Account, account_id)
+    if not acc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Account not found"
+        )
+    db.delete(acc)
+    db.commit()
+    return {"ok": True}
+
 @app.post("/transactions", response_model=TransactionOut)
 def create_tx(payload: TransactionCreate, db: Session = Depends(get_db)):
     if payload.date > date.today():
