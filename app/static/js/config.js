@@ -56,9 +56,7 @@ addBtn.addEventListener('click', () => {
   accModal.show();
 });
 
-colorBtn.addEventListener('click', () => colorInput.click());
 colorInput.addEventListener('input', e => {
-
   colorBtn.style.color = e.target.value;
 });
 
