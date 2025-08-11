@@ -38,6 +38,7 @@ addBtn.addEventListener('click', () => {
 
 colorBtn.addEventListener('click', () => colorInput.click());
 colorInput.addEventListener('input', e => {
+
   colorBtn.style.color = e.target.value;
 });
 
