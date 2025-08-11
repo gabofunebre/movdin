@@ -28,8 +28,10 @@ export function populateAccounts(select, accounts) {
 
 export function renderAccount(tbody, account, onEdit, onDelete) {
   const tr = document.createElement('tr');
+  tr.classList.add('text-center');
+  const nameColor = account.color || '#000000';
   tr.innerHTML =
-    `<td>${account.name}</td>` +
+    `<td style="color:${nameColor}">${account.name}</td>` +
     `<td>${account.currency}</td>` +
     `<td class="text-nowrap">` +
     `<button class="btn btn-sm btn-outline-secondary me-2" title="Editar"><i class="bi bi-pencil"></i></button>` +

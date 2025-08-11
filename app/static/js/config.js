@@ -30,15 +30,16 @@ addBtn.addEventListener('click', () => {
   populateCurrencies();
   idField.value = '';
   alertBox.classList.add('d-none');
-  colorInput.value = '#ffffff';
-  colorBtn.style.backgroundColor = '#ffffff';
+  colorInput.value = '#000000';
+  colorBtn.style.color = '#000000';
   modalTitle.textContent = 'Nueva cuenta';
   accModal.show();
 });
 
 colorBtn.addEventListener('click', () => colorInput.click());
 colorInput.addEventListener('input', e => {
-  colorBtn.style.backgroundColor = e.target.value;
+
+  colorBtn.style.color = e.target.value;
 });
 
 form.addEventListener('submit', async e => {
@@ -85,8 +86,9 @@ function startEdit(acc) {
   form.currency.value = acc.currency;
   form.opening_balance.value = acc.opening_balance;
   idField.value = acc.id;
-  colorInput.value = acc.color;
-  colorBtn.style.backgroundColor = acc.color;
+  const color = acc.color || '#000000';
+  colorInput.value = color;
+  colorBtn.style.color = color;
   alertBox.classList.add('d-none');
   modalTitle.textContent = 'Editar cuenta';
   accModal.show();
