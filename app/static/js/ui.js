@@ -21,7 +21,7 @@ export function renderTransaction(tbody, tx, accountMap) {
     `<td>${formattedDate}</td>` +
     `<td${descStyle}>${tx.description}</td>` +
     `<td class="${amountClass}" style="color:${amountColor}">${amount}</td>` +
-    `<td style="color:${accColor}">${accName}</td>`;
+    `<td class="text-center" style="color:${accColor}">${accName}</td>`;
   tbody.appendChild(tr);
 }
 
