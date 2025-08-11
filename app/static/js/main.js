@@ -86,6 +86,6 @@ form.addEventListener('submit', async e => {
 
 (async function init() {
   accounts = await fetchAccounts();
-  accountMap = Object.fromEntries(accounts.map(a => [a.id, a.name]));
+  accountMap = Object.fromEntries(accounts.map(a => [a.id, a]));
   await loadMore();
 })();
