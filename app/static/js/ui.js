@@ -26,19 +26,18 @@ export function populateAccounts(select, accounts) {
   });
 }
 
-export function renderAccount(tbody, account, onEdit, onDelete, onColor) {
+export function renderAccount(tbody, account, onEdit, onDelete) {
   const tr = document.createElement('tr');
+  tr.classList.add('text-center');
+  const nameColor = account.color || '#000000';
   tr.innerHTML =
-    `<td>${account.name}</td>` +
+    `<td style="color:${nameColor}">${account.name}</td>` +
     `<td>${account.currency}</td>` +
     `<td class="text-nowrap">` +
-    `<input type="color" class="form-control form-control-color p-0 border-0 me-2" value="${account.color}" title="Color">` +
     `<button class="btn btn-sm btn-outline-secondary me-2" title="Editar"><i class="bi bi-pencil"></i></button>` +
     `<button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-x"></i></button>` +
     `</td>`;
-  const colorInput = tr.querySelector('input[type="color"]');
   const [editBtn, delBtn] = tr.querySelectorAll('button');
-  if (onColor) colorInput.addEventListener('input', e => onColor(account, e.target.value));
   if (onEdit) editBtn.addEventListener('click', () => onEdit(account));
   if (onDelete) delBtn.addEventListener('click', () => onDelete(account));
   tbody.appendChild(tr);
