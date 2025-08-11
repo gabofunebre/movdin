@@ -8,6 +8,7 @@ class AccountIn(BaseModel):
     name: str
     opening_balance: Decimal = 0
     currency: Currency
+    color: str = "#000000"
     is_active: bool = True
 
 class AccountOut(AccountIn):

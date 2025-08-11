@@ -4,12 +4,15 @@ export function renderTransaction(tbody, tx, accountMap) {
   tr.classList.add(isIncome ? 'fw-bold' : 'fst-italic');
   const tipo = isIncome ? 'Ingreso' : 'Egreso';
   const amount = Math.abs(tx.amount).toFixed(2);
+  const acc = accountMap[tx.account_id];
+  const accName = acc ? acc.name : '';
+  const accColor = acc ? acc.color : '';
   tr.innerHTML =
     `<td>${tx.date}</td>` +
     `<td>${tx.description}</td>` +
     `<td>${amount}</td>` +
     `<td>${tipo}</td>` +
-    `<td>${accountMap[tx.account_id] || ''}</td>`;
+    `<td style="color:${accColor}">${accName}</td>`;
   tbody.appendChild(tr);
 }
 
@@ -23,16 +26,19 @@ export function populateAccounts(select, accounts) {
   });
 }
 
-export function renderAccount(tbody, account, onEdit, onDelete) {
+export function renderAccount(tbody, account, onEdit, onDelete, onColor) {
   const tr = document.createElement('tr');
   tr.innerHTML =
     `<td>${account.name}</td>` +
     `<td>${account.currency}</td>` +
     `<td class="text-nowrap">` +
+    `<input type="color" class="form-control form-control-color p-0 border-0 me-2" value="${account.color}" title="Color">` +
     `<button class="btn btn-sm btn-outline-secondary me-2" title="Editar"><i class="bi bi-pencil"></i></button>` +
     `<button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-x"></i></button>` +
     `</td>`;
+  const colorInput = tr.querySelector('input[type="color"]');
   const [editBtn, delBtn] = tr.querySelectorAll('button');
+  if (onColor) colorInput.addEventListener('input', e => onColor(account, e.target.value));
   if (onEdit) editBtn.addEventListener('click', () => onEdit(account));
   if (onDelete) delBtn.addEventListener('click', () => onDelete(account));
   tbody.appendChild(tr);
