@@ -1,5 +1,5 @@
 import { fetchAccounts, createAccount } from './api.js';
-import { renderAccount } from './ui.js';
+import { renderAccount, showOverlay, hideOverlay } from './ui.js';
 import { CURRENCIES } from './constants.js';
 
 const tbody = document.querySelector('#account-table tbody');
@@ -37,16 +37,18 @@ form.addEventListener('submit', async e => {
     opening_balance: parseFloat(data.get('opening_balance') || '0'),
     is_active: true
   };
-  const ok = await createAccount(payload);
+  showOverlay();
+  const result = await createAccount(payload);
+  hideOverlay();
   alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
-  if (ok) {
+  if (result.ok) {
     alertBox.classList.add('alert-success');
     alertBox.textContent = 'Cuenta guardada';
     tbody.innerHTML = '';
     await loadAccounts();
   } else {
     alertBox.classList.add('alert-danger');
-    alertBox.textContent = 'Error al guardar';
+    alertBox.textContent = result.error || 'Error al guardar';
   }
 });
 
