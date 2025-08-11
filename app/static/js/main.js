@@ -26,7 +26,7 @@ async function loadMore() {
 function openModal(type) {
   form.reset();
   document.getElementById('form-title').textContent = type === 'income' ? 'Nuevo Ingreso' : 'Nuevo Egreso';
-  populateAccounts(form.account_id, accounts);
+  populateAccounts(form.account_id, accounts.filter(a => a.is_active));
   form.dataset.type = type;
   alertBox.classList.add('d-none');
   const today = new Date().toISOString().split('T')[0];
@@ -85,7 +85,7 @@ form.addEventListener('submit', async e => {
 });
 
 (async function init() {
-  accounts = await fetchAccounts();
+  accounts = await fetchAccounts(true);
   accountMap = Object.fromEntries(accounts.map(a => [a.id, a]));
   await loadMore();
 })();

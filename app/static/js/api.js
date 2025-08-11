@@ -1,5 +1,5 @@
-export async function fetchAccounts() {
-  const res = await fetch('/accounts');
+export async function fetchAccounts(includeInactive = false) {
+  const res = await fetch(`/accounts?include_inactive=${includeInactive}`);
   return res.json();
 }
 

@@ -34,8 +34,13 @@ def create_account(payload: AccountIn, db: Session = Depends(get_db)):
 
 
 @router.get("", response_model=List[AccountOut])
-def list_accounts(db: Session = Depends(get_db)):
-    rows = db.scalars(select(Account).order_by(Account.name)).all()
+def list_accounts(
+    include_inactive: bool = False, db: Session = Depends(get_db)
+):
+    stmt = select(Account).order_by(Account.name)
+    if not include_inactive:
+        stmt = stmt.where(Account.is_active == True)
+    rows = db.scalars(stmt).all()
     return rows
 
 
@@ -68,7 +73,7 @@ def delete_account(account_id: int, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Account not found"
         )
-    db.delete(acc)
+    acc.is_active = False
     db.commit()
     return {"ok": True}
 
