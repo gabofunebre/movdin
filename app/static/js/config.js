@@ -14,6 +14,11 @@ const colorInput = form.querySelector('input[name="color"]');
 const colorBtn = document.getElementById('color-btn');
 const modalTitle = modalEl.querySelector('.modal-title');
 let accounts = [];
+const confirmEl = document.getElementById('confirmModal');
+const confirmModal = new bootstrap.Modal(confirmEl);
+const confirmMessage = confirmEl.querySelector('#confirm-message');
+const confirmBtn = confirmEl.querySelector('#confirm-yes');
+let accountToDelete = null;
 
 function populateCurrencies() {
   currencySelect.innerHTML = '';
@@ -95,9 +100,16 @@ function startEdit(acc) {
 }
 
 async function removeAccount(acc) {
-  if (!confirm('¿Eliminar cuenta?')) return;
+  accountToDelete = acc;
+  confirmMessage.textContent = `¿Eliminar cuenta "${acc.name}"?`;
+  confirmModal.show();
+}
+
+confirmBtn.addEventListener('click', async () => {
+  if (!accountToDelete) return;
+  confirmModal.hide();
   showOverlay();
-  const result = await deleteAccount(acc.id);
+  const result = await deleteAccount(accountToDelete.id);
   hideOverlay();
   if (result.ok) {
     tbody.innerHTML = '';
@@ -105,6 +117,7 @@ async function removeAccount(acc) {
   } else {
     alert(result.error || 'Error al eliminar');
   }
-}
+  accountToDelete = null;
+});
 
 loadAccounts();
