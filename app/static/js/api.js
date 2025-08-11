@@ -8,6 +8,11 @@ export async function fetchTransactions(limit, offset) {
   return res.json();
 }
 
+export async function fetchAccountBalances() {
+  const res = await fetch('/accounts/balances');
+  return res.json();
+}
+
 export async function createTransaction(payload) {
   const res = await fetch('/transactions', {
     method: 'POST',
