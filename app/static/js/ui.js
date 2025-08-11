@@ -2,16 +2,25 @@ export function renderTransaction(tbody, tx, accountMap) {
   const tr = document.createElement('tr');
   const isIncome = tx.amount >= 0;
   tr.classList.add(isIncome ? 'fw-bold' : 'fst-italic');
-  const tipo = isIncome ? 'Ingreso' : 'Egreso';
   const amount = Math.abs(tx.amount).toFixed(2);
   const acc = accountMap[tx.account_id];
   const accName = acc ? acc.name : '';
   const accColor = acc ? acc.color : '';
+  const dateObj = new Date(tx.date);
+  const formattedDate = dateObj
+    .toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    })
+    .replace('.', '');
+  const descStyle = isIncome ? '' : ' style="padding-left:2em"';
+  const amountClass = isIncome ? 'text-start' : 'text-end';
+  const amountColor = isIncome ? 'rgb(40,150,20)' : 'rgb(170,10,10)';
   tr.innerHTML =
-    `<td>${tx.date}</td>` +
-    `<td>${tx.description}</td>` +
-    `<td>${amount}</td>` +
-    `<td>${tipo}</td>` +
+    `<td>${formattedDate}</td>` +
+    `<td${descStyle}>${tx.description}</td>` +
+    `<td class="${amountClass}" style="color:${amountColor}">${amount}</td>` +
     `<td style="color:${accColor}">${accName}</td>`;
   tbody.appendChild(tr);
 }
