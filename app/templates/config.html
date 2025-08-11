@@ -70,8 +70,10 @@
               </label>
             </div>
             <div class="mb-3">
-              <input type="color" name="color" class="d-none">
-              <button type="button" id="color-btn" class="btn btn-light border border-secondary rounded-pill px-4 fw-bold">Color</button>
+              <div class="position-relative d-inline-block">
+                <input type="color" name="color" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 pe-none">
+                <button type="button" id="color-btn" class="btn btn-light border border-secondary rounded-pill px-4 fw-bold">Color</button>
+              </div>
             </div>
             <div id="acc-alert" class="alert d-none" role="alert"></div>
           </div>
