@@ -16,6 +16,17 @@ class AccountOut(AccountIn):
     class Config:
         from_attributes = True
 
+
+class TaxIn(BaseModel):
+    name: str
+    rate: Decimal
+
+
+class TaxOut(TaxIn):
+    id: int
+    class Config:
+        from_attributes = True
+
 class TransactionCreate(BaseModel):
     account_id: int
     date: date

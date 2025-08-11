@@ -1,5 +1,5 @@
-import { fetchAccounts, createAccount, updateAccount, deleteAccount } from './api.js';
-import { renderAccount, showOverlay, hideOverlay } from './ui.js';
+import { fetchAccounts, createAccount, updateAccount, deleteAccount, fetchTaxes, createTax, updateTax, deleteTax } from './api.js';
+import { renderAccount, renderTax, showOverlay, hideOverlay } from './ui.js';
 import { CURRENCIES } from './constants.js';
 
 const tbody = document.querySelector('#account-table tbody');
@@ -19,6 +19,21 @@ const confirmModal = new bootstrap.Modal(confirmEl);
 const confirmMessage = confirmEl.querySelector('#confirm-message');
 const confirmBtn = confirmEl.querySelector('#confirm-yes');
 let accountToDelete = null;
+
+const taxTbody = document.querySelector('#tax-table tbody');
+const taxModalEl = document.getElementById('taxModal');
+const taxModal = new bootstrap.Modal(taxModalEl);
+const taxForm = document.getElementById('tax-form');
+const addTaxBtn = document.getElementById('add-tax');
+const taxAlertBox = document.getElementById('tax-alert');
+const taxIdField = taxForm.querySelector('input[name="id"]');
+const taxModalTitle = taxModalEl.querySelector('.modal-title');
+let taxes = [];
+const taxConfirmEl = document.getElementById('confirmTaxModal');
+const taxConfirmModal = new bootstrap.Modal(taxConfirmEl);
+const taxConfirmMessage = taxConfirmEl.querySelector('#confirm-tax-message');
+const taxConfirmBtn = taxConfirmEl.querySelector('#confirm-tax-yes');
+let taxToDelete = null;
 
 function populateCurrencies() {
   currencySelect.innerHTML = '';
@@ -120,4 +135,77 @@ confirmBtn.addEventListener('click', async () => {
   accountToDelete = null;
 });
 
+addTaxBtn.addEventListener('click', () => {
+  taxForm.reset();
+  taxIdField.value = '';
+  taxAlertBox.classList.add('d-none');
+  taxModalTitle.textContent = 'Nuevo impuesto';
+  taxModal.show();
+});
+
+taxForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!taxForm.reportValidity()) return;
+  const data = new FormData(taxForm);
+  const payload = {
+    name: data.get('name'),
+    rate: parseFloat(data.get('rate') || '0')
+  };
+  showOverlay();
+  let result;
+  if (taxIdField.value) {
+    result = await updateTax(taxIdField.value, payload);
+  } else {
+    result = await createTax(payload);
+  }
+  hideOverlay();
+  taxAlertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+  if (result.ok) {
+    taxAlertBox.classList.add('alert-success');
+    taxAlertBox.textContent = 'Impuesto guardado';
+    taxTbody.innerHTML = '';
+    await loadTaxes();
+  } else {
+    taxAlertBox.classList.add('alert-danger');
+    taxAlertBox.textContent = result.error || 'Error al guardar';
+  }
+});
+
+async function loadTaxes() {
+  taxes = await fetchTaxes();
+  taxes.forEach(t => renderTax(taxTbody, t, startEditTax, removeTax));
+}
+
+function startEditTax(tax) {
+  taxForm.reset();
+  taxForm.name.value = tax.name;
+  taxForm.rate.value = tax.rate;
+  taxIdField.value = tax.id;
+  taxAlertBox.classList.add('d-none');
+  taxModalTitle.textContent = 'Editar impuesto';
+  taxModal.show();
+}
+
+async function removeTax(tax) {
+  taxToDelete = tax;
+  taxConfirmMessage.textContent = `¿Eliminar impuesto "${tax.name}"?`;
+  taxConfirmModal.show();
+}
+
+taxConfirmBtn.addEventListener('click', async () => {
+  if (!taxToDelete) return;
+  taxConfirmModal.hide();
+  showOverlay();
+  const result = await deleteTax(taxToDelete.id);
+  hideOverlay();
+  if (result.ok) {
+    taxTbody.innerHTML = '';
+    await loadTaxes();
+  } else {
+    alert(result.error || 'Error al eliminar');
+  }
+  taxToDelete = null;
+});
+
 loadAccounts();
+loadTaxes();
