@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, create_engine, text
+from sqlalchemy import MetaData, create_engine, text, inspect
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 import os
@@ -27,6 +27,21 @@ def init_db() -> None:
             conn.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{SCHEMA_NAME}"'))
 
     Base.metadata.create_all(bind=engine)
+
+    # Ensure the optional ``color`` column exists for backward compatibility
+    with engine.begin() as conn:
+        inspector = inspect(conn)
+        cols = {
+            col["name"]
+            for col in inspector.get_columns("accounts", schema=SCHEMA_NAME)
+        }
+        if "color" not in cols:
+            conn.execute(
+                text(
+                    f'ALTER TABLE "{SCHEMA_NAME}".accounts '
+                    "ADD COLUMN color VARCHAR(7) DEFAULT '#000000' NOT NULL"
+                )
+            )
 
 
 def get_db():
