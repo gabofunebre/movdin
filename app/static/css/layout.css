@@ -10,22 +10,23 @@ body {
 #tx-table {
   width: 100%;
   table-layout: fixed;
+  border-top: 1px solid #eee;
 }
 
 #tx-table .col-date {
-  width: 26ch;
+  width: 15.6ch;
 }
 
 #tx-table .col-desc {
-  width: 20ch;
+  width: 59.4ch;
 }
 
 #tx-table .col-amount {
-  width: 36ch;
+  width: 19.8ch;
 }
 
 #tx-table .col-account {
-  width: 32ch;
+  width: 19.2ch;
 }
 
 #tx-table tbody tr {
@@ -66,7 +67,7 @@ body {
 }
 
 #search-box {
-  width: 20rem;
+  width: 40rem;
 }
 
 #tx-table tbody td:nth-child(3) {
