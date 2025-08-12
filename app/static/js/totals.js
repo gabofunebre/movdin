@@ -10,7 +10,13 @@ function renderTotals(data) {
     const tr = document.createElement('tr');
     tr.classList.add('text-center');
     const total = Number(acc.balance).toFixed(2);
-    tr.innerHTML = `<td>${acc.name}</td><td>${total}</td>`;
+    const nameTd = document.createElement('td');
+    nameTd.textContent = acc.name;
+    nameTd.style.color = acc.color;
+    const totalTd = document.createElement('td');
+    totalTd.textContent = total;
+    tr.appendChild(nameTd);
+    tr.appendChild(totalTd);
     tbody.appendChild(tr);
   });
 }

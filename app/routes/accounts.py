@@ -89,6 +89,7 @@ def account_balances(to_date: date | None = None, db: Session = Depends(get_db))
             (Account.opening_balance + func.coalesce(func.sum(Transaction.amount), 0)).label(
                 "balance"
             ),
+            Account.color,
         )
         .select_from(Account)
         .join(
@@ -100,7 +101,13 @@ def account_balances(to_date: date | None = None, db: Session = Depends(get_db))
             isouter=True,
         )
         .where(Account.is_active == True)
-        .group_by(Account.id, Account.name, Account.opening_balance, Account.currency)
+        .group_by(
+            Account.id,
+            Account.name,
+            Account.opening_balance,
+            Account.currency,
+            Account.color,
+        )
         .order_by(Account.name)
     )
     rows = db.execute(stmt, {"to_date": to_date}).all()
@@ -110,6 +117,7 @@ def account_balances(to_date: date | None = None, db: Session = Depends(get_db))
             name=r.name,
             currency=r.currency,
             balance=r.balance,
+            color=r.color,
         )
         for r in rows
     ]
