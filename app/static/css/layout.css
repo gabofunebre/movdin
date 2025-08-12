@@ -19,7 +19,7 @@ body {
   table-layout: fixed;
   border: none;
   font-size: calc(1rem + 2pt);
-  --bs-table-striped-bg: #e6f7ff;
+  --bs-table-striped-bg: #f0f8ff;
   --bs-table-bg: #ffffff;
   box-shadow: none;
 }
@@ -47,6 +47,7 @@ body {
 #tx-table thead th {
   text-transform: uppercase;
   font-size: calc(1.1rem + 2pt);
+  border-bottom: none;
 }
 
 #tx-table th.sortable {
@@ -59,21 +60,17 @@ body {
 
 #tx-table th,
 #tx-table td {
-  border-right: 1px solid #d0d0d0;
-}
-
-#tx-table th:last-child,
-#tx-table td:last-child {
-  border-right: none;
+  border: none;
 }
 
 #menu-button {
   left: 4rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   padding: 0;
+  font-size: 2rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   transition: transform 0.15s, box-shadow 0.15s;
 }
@@ -83,7 +80,16 @@ body {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-#menu-logo {
+#logo-link {
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3.5rem;
+  height: 3.5rem;
+  display: block;
+}
+
+#logo-link img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -104,7 +110,7 @@ body {
 
 #add-expense {
   color: #ff6600;
-  border-color: #ff6600;
+  border: 1px solid #ff6600;
 }
 
 #tx-table tbody td:nth-child(3) {
@@ -114,6 +120,7 @@ body {
 #tx-table tbody tr {
   height: 3rem;
   cursor: pointer;
+  border: none;
 }
 
 #tx-table tbody tr.selected {
@@ -139,6 +146,8 @@ body {
 
 .action-btn {
   width: 8rem;
+  height: calc(1.5em + 0.75rem + 2px);
+  font-size: calc(1.1rem + 2pt);
   transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 
@@ -167,6 +176,9 @@ body {
   }
   #menu-button {
     left: 1rem;
+  }
+  #logo-link {
+    right: 1rem;
   }
   #table-controls {
     gap: 1rem;
