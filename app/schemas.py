@@ -56,6 +56,7 @@ class AccountBalance(BaseModel):
     name: str
     currency: Currency
     balance: Decimal
+    color: str
 
 
 class BalanceOut(BaseModel):
