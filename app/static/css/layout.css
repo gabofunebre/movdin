@@ -5,29 +5,48 @@ body {
 #table-container {
   overflow-y: auto;
   padding: 1rem 4rem;
-  display: flex;
-  justify-content: center;
 }
 
 #tx-table {
-  width: auto;
+  width: 100%;
   table-layout: fixed;
 }
 
 #tx-table .col-date {
-  width: 13ch;
+  width: 25ch;
 }
 
 #tx-table .col-desc {
-  width: 40ch;
+  min-width: 4ch;
 }
 
 #tx-table .col-amount {
-  width: 24ch;
+  width: 30ch;
 }
 
 #tx-table .col-account {
-  width: 16ch;
+  width: 24ch;
+}
+
+#tx-table tbody tr {
+  height: 3rem;
+}
+
+#tx-table thead {
+  background-color: #c7e0c7;
+}
+
+#tx-table thead th {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+}
+
+#tx-table th.sortable {
+  cursor: pointer;
+}
+
+#menu-button {
+  left: 4rem;
 }
 
 #overlay {
@@ -45,6 +64,16 @@ body {
 
 .table, .btn, .form-control-color {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.action-btn {
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  background-color: #e9ecef;
 }
 
 .form-control-color {

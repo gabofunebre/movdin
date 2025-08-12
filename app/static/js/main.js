@@ -7,19 +7,39 @@ const modalEl = document.getElementById('txModal');
 const txModal = new bootstrap.Modal(modalEl);
 const form = document.getElementById('tx-form');
 const alertBox = document.getElementById('tx-alert');
+const searchBox = document.getElementById('search-box');
+const dateHeader = document.getElementById('date-header');
 
 let offset = 0;
 const limit = 50;
 let loading = false;
 let accounts = [];
 let accountMap = {};
+let transactions = [];
+let sortAsc = false;
+
+function renderTransactions() {
+  const q = searchBox.value.trim().toLowerCase();
+  const filtered = transactions.filter(tx => {
+    const accName = accountMap[tx.account_id]?.name.toLowerCase() || '';
+    return tx.description.toLowerCase().includes(q) || accName.includes(q);
+  });
+  filtered.sort((a, b) =>
+    sortAsc
+      ? new Date(a.date) - new Date(b.date)
+      : new Date(b.date) - new Date(a.date)
+  );
+  tbody.innerHTML = '';
+  filtered.forEach(tx => renderTransaction(tbody, tx, accountMap));
+}
 
 async function loadMore() {
   if (loading) return;
   loading = true;
   const data = await fetchTransactions(limit, offset);
-  data.forEach(tx => renderTransaction(tbody, tx, accountMap));
+  transactions = transactions.concat(data);
   offset += data.length;
+  renderTransactions();
   loading = false;
 }
 
@@ -36,6 +56,11 @@ function openModal(type) {
 
 document.getElementById('add-income').addEventListener('click', () => openModal('income'));
 document.getElementById('add-expense').addEventListener('click', () => openModal('expense'));
+searchBox.addEventListener('input', renderTransactions);
+dateHeader.addEventListener('click', () => {
+  sortAsc = !sortAsc;
+  renderTransactions();
+});
 
 container.addEventListener('scroll', () => {
   if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
@@ -71,7 +96,7 @@ form.addEventListener('submit', async e => {
   if (result.ok) {
     alertBox.classList.add('alert-success');
     alertBox.textContent = 'Movimiento guardado';
-    tbody.innerHTML = '';
+    transactions = [];
     offset = 0;
     await loadMore();
     setTimeout(() => {
