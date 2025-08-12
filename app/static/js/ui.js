@@ -1,7 +1,6 @@
 export function renderTransaction(tbody, tx, accountMap) {
   const tr = document.createElement('tr');
   const isIncome = tx.amount >= 0;
-  tr.classList.add(isIncome ? 'fw-bold' : 'fst-italic');
   const amount = Math.abs(tx.amount).toFixed(2);
   const acc = accountMap[tx.account_id];
   const accName = acc ? acc.name : '';
@@ -14,12 +13,13 @@ export function renderTransaction(tbody, tx, accountMap) {
       year: 'numeric'
     })
     .replace('.', '');
+  const descClass = isIncome ? '' : 'fst-italic';
   const descStyle = isIncome ? '' : ' style="padding-left:2em"';
   const amountClass = isIncome ? 'text-start' : 'text-end';
   const amountColor = isIncome ? 'rgb(40,150,20)' : 'rgb(170,10,10)';
   tr.innerHTML =
     `<td class="text-center">${formattedDate}</td>` +
-    `<td${descStyle}>${tx.description}</td>` +
+    `<td class="${descClass}"${descStyle}>${tx.description}</td>` +
     `<td class="${amountClass}" style="color:${amountColor}">${amount}</td>` +
     `<td class="text-center" style="color:${accColor}">${accName}</td>`;
   tbody.appendChild(tr);
