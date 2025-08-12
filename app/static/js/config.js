@@ -79,7 +79,7 @@ function populateTaxOptions(selected = []) {
   });
 }
 
-  addBtn.addEventListener('click', () => {
+  addBtn.addEventListener('click', async () => {
     form.reset();
     populateCurrencies();
     idField.value = '';
@@ -87,6 +87,9 @@ function populateTaxOptions(selected = []) {
     colorInput.value = '#000000';
     colorBtn.style.color = '#000000';
     modalTitle.textContent = 'Nueva cuenta';
+    if (taxes.length === 0) {
+      taxes = await fetchTaxes();
+    }
     populateTaxOptions();
     accModal.show();
   });
@@ -138,7 +141,13 @@ form.addEventListener('submit', async e => {
 
 async function loadAccounts() {
   accounts = await fetchAccounts();
-  accounts.forEach(acc => renderAccount(tbody, acc, startEdit, removeAccount));
+  const taxesList = await Promise.all(
+    accounts.map(acc => fetchAccountTaxes(acc.id))
+  );
+  accounts.forEach((acc, idx) => {
+    acc.taxes = taxesList[idx];
+    renderAccount(tbody, acc, startEdit, removeAccount);
+  });
 }
 
 
@@ -154,7 +163,10 @@ async function startEdit(acc) {
   colorBtn.style.color = color;
   alertBox.classList.add('d-none');
   modalTitle.textContent = 'Editar cuenta';
-  const accountTaxes = await fetchAccountTaxes(acc.id);
+  if (taxes.length === 0) {
+    taxes = await fetchTaxes();
+  }
+  const accountTaxes = acc.taxes || await fetchAccountTaxes(acc.id);
   const selected = accountTaxes.map(t => t.id);
   populateTaxOptions(selected);
   accModal.show();
@@ -270,6 +282,8 @@ assocBtn.addEventListener('click', async () => {
   if (result.ok) {
     alertBox.classList.add('alert-success');
     alertBox.textContent = 'Impuestos asociados';
+    tbody.innerHTML = '';
+    await loadAccounts();
   } else {
     alertBox.classList.add('alert-danger');
     alertBox.textContent = result.error || 'Error al guardar';
