@@ -4,7 +4,7 @@ body {
 
 #table-container {
   overflow-y: auto;
-  padding: 1rem 2rem;
+  padding: 1rem 4rem;
 }
 
 #tx-table {
@@ -14,26 +14,27 @@ body {
 
 #tx-table .col-date {
 
-  width: 10ch;
-
+  width: 25ch;
 }
 
 #tx-table .col-desc {
-  min-width: 40ch;
+  min-width: 4ch;
 }
 
 #tx-table .col-amount {
-
-  width: 18ch;
+  width: 27ch;
 }
 
 #tx-table .col-account {
-  width: 12ch;
-
+  width: 24ch;
 }
 
 #tx-table tbody tr {
   height: 3rem;
+}
+
+#menu-button {
+  left: 4rem;
 }
 
 #overlay {
