@@ -73,7 +73,6 @@ class FrequentTransaction(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-
 class Tax(Base):
     __tablename__ = "taxes"
     id: Mapped[int] = mapped_column(primary_key=True)

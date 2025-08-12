@@ -35,6 +35,7 @@ const colorInput = form.querySelector('input[name="color"]');
 const colorBtn = document.getElementById('color-btn');
 const modalTitle = modalEl.querySelector('.modal-title');
 let accounts = [];
+let accountMap = {};
 const confirmEl = document.getElementById('confirmModal');
 const confirmModal = new bootstrap.Modal(confirmEl);
 const confirmMessage = confirmEl.querySelector('#confirm-message');
@@ -327,7 +328,6 @@ freqForm.addEventListener('submit', async e => {
 async function loadFrequents() {
   frequents = await fetchFrequents();
   freqTbody.innerHTML = '';
-  frequents.forEach(f => renderFrequent(freqTbody, f, startEditFreq, removeFreq));
 }
 
 function startEditFreq(freq) {
