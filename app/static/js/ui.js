@@ -47,9 +47,11 @@ export function renderAccount(tbody, account, onEdit, onDelete) {
   const tr = document.createElement('tr');
   tr.classList.add('text-center');
   const nameColor = account.color || '#000000';
+  const taxNames = (account.taxes || []).map(t => t.name).join(', ');
   tr.innerHTML =
     `<td style="color:${nameColor}">${account.name}</td>` +
     `<td>${account.currency}</td>` +
+    `<td>${taxNames}</td>` +
     `<td class="text-nowrap">` +
     `<button class="btn btn-sm btn-outline-secondary me-2" title="Editar"><i class="bi bi-pencil"></i></button>` +
     `<button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-x"></i></button>` +
