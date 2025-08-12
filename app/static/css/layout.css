@@ -13,19 +13,19 @@ body {
 }
 
 #tx-table .col-date {
-  width: 25ch;
+  width: 12ch;
 }
 
 #tx-table .col-desc {
-  min-width: 4ch;
+  min-width: 30ch;
 }
 
 #tx-table .col-amount {
-  width: 30ch;
+  width: 20ch;
 }
 
 #tx-table .col-account {
-  width: 24ch;
+  width: 15ch;
 }
 
 #tx-table tbody tr {
@@ -45,8 +45,24 @@ body {
   cursor: pointer;
 }
 
+#tx-table th,
+#tx-table td {
+  border-right: 1px solid #d0d0d0;
+}
+
+#tx-table th:last-child,
+#tx-table td:last-child {
+  border-right: none;
+}
+
 #menu-button {
   left: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#search-box {
+  width: 14rem;
 }
 
 #overlay {
