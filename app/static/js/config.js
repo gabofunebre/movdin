@@ -133,6 +133,7 @@ form.addEventListener('submit', async e => {
     }
     tbody.innerHTML = '';
     await loadAccounts();
+    accModal.hide();
   } else {
     alertBox.classList.add('alert-danger');
     alertBox.textContent = result.error || 'Error al guardar';
