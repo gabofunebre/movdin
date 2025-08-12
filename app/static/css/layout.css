@@ -19,7 +19,7 @@ body {
   table-layout: fixed;
   border: none;
   font-size: calc(1rem + 2pt);
-  --bs-table-striped-bg: #e6f7ff;
+  --bs-table-striped-bg: #f0f8ff;
   --bs-table-bg: #ffffff;
   box-shadow: none;
 }
@@ -47,6 +47,7 @@ body {
 #tx-table thead th {
   text-transform: uppercase;
   font-size: calc(1.1rem + 2pt);
+  border-bottom: none;
 }
 
 #tx-table th.sortable {
@@ -59,12 +60,7 @@ body {
 
 #tx-table th,
 #tx-table td {
-  border-right: 1px solid #d0d0d0;
-}
-
-#tx-table th:last-child,
-#tx-table td:last-child {
-  border-right: none;
+  border: none;
 }
 
 #menu-button {
@@ -104,7 +100,7 @@ body {
 
 #add-expense {
   color: #ff6600;
-  border-color: #ff6600;
+  border: 1px solid #ff6600;
 }
 
 #tx-table tbody td:nth-child(3) {
@@ -114,6 +110,7 @@ body {
 #tx-table tbody tr {
   height: 3rem;
   cursor: pointer;
+  border: none;
 }
 
 #tx-table tbody tr.selected {
@@ -139,6 +136,8 @@ body {
 
 .action-btn {
   width: 8rem;
+  height: calc(1.5em + 0.75rem + 2px);
+  font-size: calc(1.1rem + 2pt);
   transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 
