@@ -13,19 +13,19 @@ body {
 }
 
 #tx-table .col-date {
-  width: 12ch;
+  width: 26ch;
 }
 
 #tx-table .col-desc {
-  min-width: 30ch;
-}
-
-#tx-table .col-amount {
   width: 20ch;
 }
 
+#tx-table .col-amount {
+  width: 36ch;
+}
+
 #tx-table .col-account {
-  width: 15ch;
+  width: 32ch;
 }
 
 #tx-table tbody tr {
@@ -33,7 +33,7 @@ body {
 }
 
 #tx-table thead {
-  background-color: #c7e0c7;
+  background-color: #b7e4b2;
 }
 
 #tx-table thead th {
@@ -61,45 +61,12 @@ body {
   transform: translateY(-50%);
 }
 
-#search-box {
-  width: 14rem;
-}
-
-#tx-table tbody tr {
-  height: 3rem;
-}
-
-#tx-table thead {
-  background-color: #d1d1d1;
-}
-
-#tx-table thead th {
-  text-transform: uppercase;
-  font-size: 1.1rem;
-}
-
-#tx-table th.sortable {
-  cursor: pointer;
-}
-
-#tx-table th,
-#tx-table td {
-  border-right: 1px solid #d0d0d0;
-}
-
-#tx-table th:last-child,
-#tx-table td:last-child {
-  border-right: none;
-}
-
-#menu-button {
-  left: 4rem;
-  top: 50%;
-  transform: translateY(-50%);
+#table-controls {
+  gap: 8rem;
 }
 
 #search-box {
-  width: 28rem;
+  width: 20rem;
 }
 
 #tx-table tbody td:nth-child(3) {
@@ -124,6 +91,7 @@ body {
 }
 
 .action-btn {
+  width: 8rem;
   transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 
