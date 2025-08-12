@@ -5,12 +5,10 @@ body {
 #table-container {
   overflow-y: auto;
   padding: 1rem 4rem;
-  display: flex;
-  justify-content: center;
 }
 
 #tx-table {
-  width: auto;
+  width: 100%;
   table-layout: fixed;
 }
 
@@ -30,6 +28,47 @@ body {
   width: 16ch;
 }
 
+#tx-table tbody tr {
+  height: 3rem;
+}
+
+#tx-table thead {
+  background-color: #d1d1d1;
+}
+
+#tx-table thead th {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+}
+
+#tx-table th.sortable {
+  cursor: pointer;
+}
+
+#tx-table th,
+#tx-table td {
+  border-right: 1px solid #d0d0d0;
+}
+
+#tx-table th:last-child,
+#tx-table td:last-child {
+  border-right: none;
+}
+
+#menu-button {
+  left: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#search-box {
+  width: 28rem;
+}
+
+#tx-table tbody td:nth-child(3) {
+  font-size: 1.1rem;
+}
+
 #overlay {
   position: fixed;
   top: 0;
@@ -45,6 +84,16 @@ body {
 
 .table, .btn, .form-control-color {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.action-btn {
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  background-color: #e9ecef;
 }
 
 .form-control-color {
