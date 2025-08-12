@@ -1,8 +1,8 @@
-from pydantic import BaseModel
 from datetime import date
 from decimal import Decimal
 from typing import List
 
+from pydantic import BaseModel
 from config.constants import Currency
 
 class AccountIn(BaseModel):
@@ -54,6 +54,19 @@ class TransactionOut(BaseModel):
 
 class TransactionWithBalance(TransactionOut):
     running_balance: Decimal
+
+
+class FrequentIn(BaseModel):
+    description: str
+    amount: Decimal
+    account_id: int
+
+
+class FrequentOut(FrequentIn):
+    id: int
+
+    class Config:
+        from_attributes = True
 
 
 class AccountBalance(BaseModel):

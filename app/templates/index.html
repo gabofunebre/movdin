@@ -40,10 +40,16 @@
                 <input type="date" name="date" class="form-control" required>
               </label>
             </div>
-            <div class="mb-3">
-              <label class="form-label">Concepto
-                <input type="text" name="description" class="form-control">
-              </label>
+        <div class="mb-3">
+              <label class="form-label">Concepto</label>
+              <div class="d-flex align-items-center">
+                <input type="text" name="description" class="form-control" id="desc-input">
+                <select id="freq-select" class="form-select d-none"></select>
+                <div class="form-check ms-2">
+                  <input class="form-check-input" type="checkbox" id="freq-check">
+                  <label class="form-check-label" for="freq-check">Frecuente</label>
+                </div>
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Monto

@@ -79,6 +79,25 @@ export function renderTax(tbody, tax, onEdit, onDelete) {
   tbody.appendChild(tr);
 }
 
+export function renderFrequent(tbody, freq, accountMap, onEdit, onDelete) {
+  const tr = document.createElement('tr');
+  tr.classList.add('text-center');
+  const accName = accountMap[freq.account_id]?.name || '';
+  const amount = Number(freq.amount).toFixed(2);
+  tr.innerHTML =
+    `<td>${freq.description}</td>` +
+    `<td>${amount}</td>` +
+    `<td>${accName}</td>` +
+    `<td class="text-nowrap">` +
+    `<button class="btn btn-sm btn-outline-secondary me-2" title="Editar"><i class="bi bi-pencil"></i></button>` +
+    `<button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-x"></i></button>` +
+    `</td>`;
+  const [editBtn, delBtn] = tr.querySelectorAll('button');
+  if (onEdit) editBtn.addEventListener('click', () => onEdit(freq));
+  if (onDelete) delBtn.addEventListener('click', () => onDelete(freq));
+  tbody.appendChild(tr);
+}
+
 const overlayEl = document.getElementById('overlay');
 
 export function showOverlay() {

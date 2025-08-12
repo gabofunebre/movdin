@@ -1,4 +1,4 @@
-import { fetchAccounts, fetchTransactions, createTransaction } from './api.js';
+import { fetchAccounts, fetchTransactions, createTransaction, fetchFrequents } from './api.js';
 import { renderTransaction, populateAccounts, showOverlay, hideOverlay } from './ui.js';
 
 const tbody = document.querySelector('#tx-table tbody');
@@ -9,6 +9,9 @@ const form = document.getElementById('tx-form');
 const alertBox = document.getElementById('tx-alert');
 const searchBox = document.getElementById('search-box');
 const headers = document.querySelectorAll('#tx-table thead th.sortable');
+const freqCheck = document.getElementById('freq-check');
+const freqSelect = document.getElementById('freq-select');
+const descInput = document.getElementById('desc-input');
 
 let offset = 0;
 const limit = 50;
@@ -18,6 +21,8 @@ let accountMap = {};
 let transactions = [];
 let sortColumn = 0;
 let sortAsc = false;
+let frequents = [];
+let frequentMap = {};
 
 function renderTransactions() {
   const q = searchBox.value.trim().toLowerCase();
@@ -68,12 +73,50 @@ function openModal(type) {
   const today = new Date().toISOString().split('T')[0];
   form.date.max = today;
   form.date.value = today;
+  freqCheck.checked = false;
+  descInput.classList.remove('d-none');
+  freqSelect.classList.add('d-none');
   txModal.show();
 }
 
 document.getElementById('add-income').addEventListener('click', () => openModal('income'));
 document.getElementById('add-expense').addEventListener('click', () => openModal('expense'));
 searchBox.addEventListener('input', renderTransactions);
+freqCheck.addEventListener('change', () => {
+  if (freqCheck.checked) {
+    populateFreqSelect();
+    descInput.classList.add('d-none');
+    freqSelect.classList.remove('d-none');
+    if (freqSelect.value) {
+      applyFrequent(frequentMap[freqSelect.value]);
+    }
+  } else {
+    descInput.classList.remove('d-none');
+    freqSelect.classList.add('d-none');
+  }
+});
+
+freqSelect.addEventListener('change', () => {
+  const f = frequentMap[freqSelect.value];
+  if (f) applyFrequent(f);
+});
+
+function populateFreqSelect() {
+  freqSelect.innerHTML = '';
+  frequents.forEach(f => {
+    const opt = document.createElement('option');
+    opt.value = f.id;
+    opt.textContent = f.description;
+    freqSelect.appendChild(opt);
+  });
+}
+
+function applyFrequent(f) {
+  if (!f) return;
+  descInput.value = f.description;
+  form.amount.value = Math.abs(f.amount).toFixed(2);
+  form.account_id.value = f.account_id;
+}
 
 headers.forEach((th, index) => {
   th.addEventListener('click', () => {
@@ -151,6 +194,8 @@ form.addEventListener('submit', async e => {
 (async function init() {
   accounts = await fetchAccounts(true);
   accountMap = Object.fromEntries(accounts.map(a => [a.id, a]));
+  frequents = await fetchFrequents();
+  frequentMap = Object.fromEntries(frequents.map(f => [f.id, f]));
   await loadMore();
   updateSortIcons();
 })();
