@@ -1,5 +1,6 @@
 import { fetchAccountBalances } from './api.js';
 import { showOverlay, hideOverlay } from './ui.js';
+import { CURRENCY_SYMBOLS } from './constants.js';
 
 const tbody = document.querySelector('#totals-table tbody');
 const refreshBtn = document.getElementById('refresh-totals');
@@ -14,7 +15,8 @@ function renderTotals(data) {
     nameTd.textContent = acc.name;
     nameTd.style.color = acc.color;
     const totalTd = document.createElement('td');
-    totalTd.textContent = total;
+    const symbol = CURRENCY_SYMBOLS[acc.currency] || '';
+    totalTd.textContent = `${symbol} ${total}`;
     tr.appendChild(nameTd);
     tr.appendChild(totalTd);
     tbody.appendChild(tr);
