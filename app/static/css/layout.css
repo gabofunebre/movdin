@@ -41,7 +41,7 @@ body {
 }
 
 #tx-table thead {
-  background-color: #e9ecef;
+  --bs-table-bg: #e9ecef;
 }
 
 #tx-table thead th {
