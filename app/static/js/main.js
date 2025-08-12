@@ -8,7 +8,7 @@ const txModal = new bootstrap.Modal(modalEl);
 const form = document.getElementById('tx-form');
 const alertBox = document.getElementById('tx-alert');
 const searchBox = document.getElementById('search-box');
-const dateHeader = document.getElementById('date-header');
+const headers = document.querySelectorAll('#tx-table thead th.sortable');
 
 let offset = 0;
 const limit = 50;
@@ -16,6 +16,7 @@ let loading = false;
 let accounts = [];
 let accountMap = {};
 let transactions = [];
+let sortColumn = 0;
 let sortAsc = false;
 
 function renderTransactions() {
@@ -24,11 +25,26 @@ function renderTransactions() {
     const accName = accountMap[tx.account_id]?.name.toLowerCase() || '';
     return tx.description.toLowerCase().includes(q) || accName.includes(q);
   });
-  filtered.sort((a, b) =>
-    sortAsc
-      ? new Date(a.date) - new Date(b.date)
-      : new Date(b.date) - new Date(a.date)
-  );
+  filtered.sort((a, b) => {
+    switch (sortColumn) {
+      case 0:
+        return sortAsc
+          ? new Date(a.date) - new Date(b.date)
+          : new Date(b.date) - new Date(a.date);
+      case 1:
+        return sortAsc
+          ? a.description.localeCompare(b.description)
+          : b.description.localeCompare(a.description);
+      case 2:
+        return sortAsc ? a.amount - b.amount : b.amount - a.amount;
+      case 3:
+        const accA = accountMap[a.account_id]?.name || '';
+        const accB = accountMap[b.account_id]?.name || '';
+        return sortAsc ? accA.localeCompare(accB) : accB.localeCompare(accA);
+      default:
+        return 0;
+    }
+  });
   tbody.innerHTML = '';
   filtered.forEach(tx => renderTransaction(tbody, tx, accountMap));
 }
@@ -57,10 +73,32 @@ function openModal(type) {
 document.getElementById('add-income').addEventListener('click', () => openModal('income'));
 document.getElementById('add-expense').addEventListener('click', () => openModal('expense'));
 searchBox.addEventListener('input', renderTransactions);
-dateHeader.addEventListener('click', () => {
-  sortAsc = !sortAsc;
-  renderTransactions();
+
+headers.forEach((th, index) => {
+  th.addEventListener('click', () => {
+    if (sortColumn === index) {
+      sortAsc = !sortAsc;
+    } else {
+      sortColumn = index;
+      sortAsc = true;
+    }
+    updateSortIcons();
+    renderTransactions();
+  });
 });
+
+function updateSortIcons() {
+  headers.forEach((th, index) => {
+    const icon = th.querySelector('.sort-icon');
+    if (!icon) return;
+    icon.classList.remove('bi-arrow-up', 'bi-arrow-down', 'bi-arrow-down-up');
+    if (index === sortColumn) {
+      icon.classList.add(sortAsc ? 'bi-arrow-up' : 'bi-arrow-down');
+    } else {
+      icon.classList.add('bi-arrow-down-up');
+    }
+  });
+}
 
 container.addEventListener('scroll', () => {
   if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
@@ -113,4 +151,5 @@ form.addEventListener('submit', async e => {
   accounts = await fetchAccounts(true);
   accountMap = Object.fromEntries(accounts.map(a => [a.id, a]));
   await loadMore();
+  updateSortIcons();
 })();

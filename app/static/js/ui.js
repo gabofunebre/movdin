@@ -26,6 +26,10 @@ export function renderTransaction(tbody, tx, accountMap) {
     `<td class="${descClass}"${descStyle}>${tx.description}</td>` +
     `<td class="${amountClass}" style="color:${amountColor}">${symbol} ${amount}</td>` +
     `<td class="text-center" style="color:${accColor}">${accName}</td>`;
+  tr.addEventListener('click', () => {
+    tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+    tr.classList.add('selected');
+  });
   tbody.appendChild(tr);
 }
 
