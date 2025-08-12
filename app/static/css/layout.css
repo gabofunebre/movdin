@@ -7,13 +7,21 @@ body {
   padding: 1rem 4rem;
 }
 
+#tx-table-wrapper {
+  border: 1px solid #d0d0d0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
 #tx-table {
   width: 100%;
   table-layout: fixed;
-  border-top: 1px solid #eee;
+  border: none;
   font-size: calc(1rem + 2pt);
   --bs-table-striped-bg: #e6f7ff;
   --bs-table-bg: #ffffff;
+  box-shadow: none;
 }
 
 #tx-table .col-date {
@@ -32,10 +40,6 @@ body {
   width: 19.2ch;
 }
 
-#tx-table tbody tr {
-  height: 3rem;
-}
-
 #tx-table thead {
   background-color: #d3d3d3;
 }
@@ -47,6 +51,10 @@ body {
 
 #tx-table th.sortable {
   cursor: pointer;
+}
+
+#tx-table th .sort-icon {
+  font-size: 0.8rem;
 }
 
 #tx-table th,
@@ -87,12 +95,29 @@ body {
 }
 
 #search-box {
-  width: 40rem;
+  width: 50rem;
   max-width: 100%;
+  font-size: calc(1.1rem + 2pt);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#add-expense {
+  color: #ff6600;
+  border-color: #ff6600;
 }
 
 #tx-table tbody td:nth-child(3) {
   font-size: calc(1.1rem + 2pt);
+}
+
+#tx-table tbody tr {
+  height: 3rem;
+  cursor: pointer;
+}
+
+#tx-table tbody tr.selected {
+  background-color: #fff3cd;
 }
 
 #overlay {
