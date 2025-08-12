@@ -114,8 +114,6 @@ function populateFreqSelect() {
 function applyFrequent(f) {
   if (!f) return;
   descInput.value = f.description;
-  form.amount.value = Math.abs(f.amount).toFixed(2);
-  form.account_id.value = f.account_id;
 }
 
 headers.forEach((th, index) => {

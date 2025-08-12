@@ -19,8 +19,7 @@ import {
   renderTax,
   renderFrequent,
   showOverlay,
-  hideOverlay,
-  populateAccounts
+  hideOverlay
 } from './ui.js';
 import { CURRENCIES } from './constants.js';
 
@@ -169,7 +168,6 @@ form.addEventListener('submit', async e => {
 
 async function loadAccounts() {
   accounts = await fetchAccounts();
-  accountMap = Object.fromEntries(accounts.map(a => [a.id, a]));
   const taxesList = await Promise.all(accounts.map(acc => fetchAccountTaxes(acc.id)));
   accounts.forEach((acc, idx) => {
     acc.taxes = taxesList[idx];
@@ -297,7 +295,6 @@ addFreqBtn.addEventListener('click', () => {
   freqIdField.value = '';
   freqAlertBox.classList.add('d-none');
   freqModalTitle.textContent = 'Nueva transacción frecuente';
-  populateAccounts(freqForm.account_id, accounts);
   freqModal.show();
 });
 
@@ -306,9 +303,7 @@ freqForm.addEventListener('submit', async e => {
   if (!freqForm.reportValidity()) return;
   const data = new FormData(freqForm);
   const payload = {
-    description: data.get('description'),
-    amount: parseFloat(data.get('amount') || '0'),
-    account_id: parseInt(data.get('account_id'), 10)
+    description: data.get('description')
   };
   showOverlay();
   let result;
@@ -333,15 +328,11 @@ freqForm.addEventListener('submit', async e => {
 async function loadFrequents() {
   frequents = await fetchFrequents();
   freqTbody.innerHTML = '';
-  frequents.forEach(f => renderFrequent(freqTbody, f, accountMap, startEditFreq, removeFreq));
 }
 
 function startEditFreq(freq) {
   freqForm.reset();
   freqForm.description.value = freq.description;
-  freqForm.amount.value = freq.amount;
-  populateAccounts(freqForm.account_id, accounts);
-  freqForm.account_id.value = freq.account_id;
   freqIdField.value = freq.id;
   freqAlertBox.classList.add('d-none');
   freqModalTitle.textContent = 'Editar transacción frecuente';

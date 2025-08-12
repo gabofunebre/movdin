@@ -58,8 +58,6 @@ class TransactionWithBalance(TransactionOut):
 
 class FrequentIn(BaseModel):
     description: str
-    amount: Decimal
-    account_id: int
 
 
 class FrequentOut(FrequentIn):
