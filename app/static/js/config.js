@@ -8,9 +8,20 @@ import {
   updateTax,
   deleteTax,
   fetchAccountTaxes,
-  setAccountTaxes
+  setAccountTaxes,
+  fetchFrequents,
+  createFrequent,
+  updateFrequent,
+  deleteFrequent
 } from './api.js';
-import { renderAccount, renderTax, showOverlay, hideOverlay } from './ui.js';
+import {
+  renderAccount,
+  renderTax,
+  renderFrequent,
+  showOverlay,
+  hideOverlay,
+  populateAccounts
+} from './ui.js';
 import { CURRENCIES } from './constants.js';
 
 const tbody = document.querySelector('#account-table tbody');
@@ -25,6 +36,7 @@ const colorInput = form.querySelector('input[name="color"]');
 const colorBtn = document.getElementById('color-btn');
 const modalTitle = modalEl.querySelector('.modal-title');
 let accounts = [];
+let accountMap = {};
 const confirmEl = document.getElementById('confirmModal');
 const confirmModal = new bootstrap.Modal(confirmEl);
 const confirmMessage = confirmEl.querySelector('#confirm-message');
@@ -47,6 +59,21 @@ const taxConfirmModal = new bootstrap.Modal(taxConfirmEl);
 const taxConfirmMessage = taxConfirmEl.querySelector('#confirm-tax-message');
 const taxConfirmBtn = taxConfirmEl.querySelector('#confirm-tax-yes');
 let taxToDelete = null;
+
+const freqTbody = document.querySelector('#freq-table tbody');
+const freqModalEl = document.getElementById('freqModal');
+const freqModal = new bootstrap.Modal(freqModalEl);
+const freqForm = document.getElementById('freq-form');
+const addFreqBtn = document.getElementById('add-freq');
+const freqAlertBox = document.getElementById('freq-alert');
+const freqIdField = freqForm.querySelector('input[name="id"]');
+const freqModalTitle = freqModalEl.querySelector('.modal-title');
+const freqConfirmEl = document.getElementById('confirmFreqModal');
+const freqConfirmModal = new bootstrap.Modal(freqConfirmEl);
+const freqConfirmMessage = freqConfirmEl.querySelector('#confirm-freq-message');
+const freqConfirmBtn = freqConfirmEl.querySelector('#confirm-freq-yes');
+let freqToDelete = null;
+let frequents = [];
 
 function populateCurrencies() {
   currencySelect.innerHTML = '';
@@ -142,9 +169,8 @@ form.addEventListener('submit', async e => {
 
 async function loadAccounts() {
   accounts = await fetchAccounts();
-  const taxesList = await Promise.all(
-    accounts.map(acc => fetchAccountTaxes(acc.id))
-  );
+  accountMap = Object.fromEntries(accounts.map(a => [a.id, a]));
+  const taxesList = await Promise.all(accounts.map(acc => fetchAccountTaxes(acc.id)));
   accounts.forEach((acc, idx) => {
     acc.taxes = taxesList[idx];
     renderAccount(tbody, acc, startEdit, removeAccount);
@@ -266,6 +292,83 @@ taxConfirmBtn.addEventListener('click', async () => {
   taxToDelete = null;
 });
 
+addFreqBtn.addEventListener('click', () => {
+  freqForm.reset();
+  freqIdField.value = '';
+  freqAlertBox.classList.add('d-none');
+  freqModalTitle.textContent = 'Nueva transacción frecuente';
+  populateAccounts(freqForm.account_id, accounts);
+  freqModal.show();
+});
+
+freqForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!freqForm.reportValidity()) return;
+  const data = new FormData(freqForm);
+  const payload = {
+    description: data.get('description'),
+    amount: parseFloat(data.get('amount') || '0'),
+    account_id: parseInt(data.get('account_id'), 10)
+  };
+  showOverlay();
+  let result;
+  if (freqIdField.value) {
+    result = await updateFrequent(freqIdField.value, payload);
+  } else {
+    result = await createFrequent(payload);
+  }
+  hideOverlay();
+  freqAlertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+  if (result.ok) {
+    freqAlertBox.classList.add('alert-success');
+    freqAlertBox.textContent = 'Frecuente guardado';
+    freqTbody.innerHTML = '';
+    await loadFrequents();
+  } else {
+    freqAlertBox.classList.add('alert-danger');
+    freqAlertBox.textContent = result.error || 'Error al guardar';
+  }
+});
+
+async function loadFrequents() {
+  frequents = await fetchFrequents();
+  freqTbody.innerHTML = '';
+  frequents.forEach(f => renderFrequent(freqTbody, f, accountMap, startEditFreq, removeFreq));
+}
+
+function startEditFreq(freq) {
+  freqForm.reset();
+  freqForm.description.value = freq.description;
+  freqForm.amount.value = freq.amount;
+  populateAccounts(freqForm.account_id, accounts);
+  freqForm.account_id.value = freq.account_id;
+  freqIdField.value = freq.id;
+  freqAlertBox.classList.add('d-none');
+  freqModalTitle.textContent = 'Editar transacción frecuente';
+  freqModal.show();
+}
+
+async function removeFreq(freq) {
+  freqToDelete = freq;
+  freqConfirmMessage.textContent = `¿Eliminar transacción frecuente "${freq.description}"?`;
+  freqConfirmModal.show();
+}
+
+freqConfirmBtn.addEventListener('click', async () => {
+  if (!freqToDelete) return;
+  freqConfirmModal.hide();
+  showOverlay();
+  const result = await deleteFrequent(freqToDelete.id);
+  hideOverlay();
+  if (result.ok) {
+    freqTbody.innerHTML = '';
+    await loadFrequents();
+  } else {
+    alert(result.error || 'Error al eliminar');
+  }
+  freqToDelete = null;
+});
+
 assocBtn.addEventListener('click', async () => {
   if (!idField.value) {
     alertBox.classList.remove('d-none', 'alert-success');
@@ -291,5 +394,5 @@ assocBtn.addEventListener('click', async () => {
   }
 });
 
-loadAccounts();
+loadAccounts().then(() => loadFrequents());
 loadTaxes();
