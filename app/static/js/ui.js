@@ -1,3 +1,5 @@
+import { CURRENCY_SYMBOLS } from './constants.js';
+
 export function renderTransaction(tbody, tx, accountMap) {
   const tr = document.createElement('tr');
   const isIncome = tx.amount >= 0;
@@ -5,6 +7,8 @@ export function renderTransaction(tbody, tx, accountMap) {
   const acc = accountMap[tx.account_id];
   const accName = acc ? acc.name : '';
   const accColor = acc ? acc.color : '';
+  const currency = acc ? acc.currency : null;
+  const symbol = currency ? CURRENCY_SYMBOLS[currency] || '' : '';
   const dateObj = new Date(tx.date);
   const formattedDate = dateObj
     .toLocaleDateString('es-ES', {
@@ -20,7 +24,7 @@ export function renderTransaction(tbody, tx, accountMap) {
   tr.innerHTML =
     `<td class="text-center">${formattedDate}</td>` +
     `<td class="${descClass}"${descStyle}>${tx.description}</td>` +
-    `<td class="${amountClass}" style="color:${amountColor}">${amount}</td>` +
+    `<td class="${amountClass}" style="color:${amountColor}">${symbol} ${amount}</td>` +
     `<td class="text-center" style="color:${accColor}">${accName}</td>`;
   tbody.appendChild(tr);
 }
