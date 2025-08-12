@@ -13,7 +13,9 @@ body {
 }
 
 #tx-table .col-date {
-  min-width: 13ch;
+
+  width: 10ch;
+
 }
 
 #tx-table .col-desc {
@@ -21,11 +23,13 @@ body {
 }
 
 #tx-table .col-amount {
-  min-width: 24ch;
+
+  width: 18ch;
 }
 
 #tx-table .col-account {
-  min-width: 16ch;
+  width: 12ch;
+
 }
 
 #tx-table tbody tr {
