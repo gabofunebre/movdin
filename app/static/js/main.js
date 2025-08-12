@@ -67,6 +67,7 @@ function openModal(type) {
   alertBox.classList.add('d-none');
   const today = new Date().toISOString().split('T')[0];
   form.date.max = today;
+  form.date.value = today;
   txModal.show();
 }
 
