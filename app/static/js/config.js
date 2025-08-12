@@ -1,4 +1,15 @@
-import { fetchAccounts, createAccount, updateAccount, deleteAccount, fetchTaxes, createTax, updateTax, deleteTax } from './api.js';
+import {
+  fetchAccounts,
+  createAccount,
+  updateAccount,
+  deleteAccount,
+  fetchTaxes,
+  createTax,
+  updateTax,
+  deleteTax,
+  fetchAccountTaxes,
+  setAccountTaxes
+} from './api.js';
 import { renderAccount, renderTax, showOverlay, hideOverlay } from './ui.js';
 import { CURRENCIES } from './constants.js';
 
@@ -19,6 +30,8 @@ const confirmModal = new bootstrap.Modal(confirmEl);
 const confirmMessage = confirmEl.querySelector('#confirm-message');
 const confirmBtn = confirmEl.querySelector('#confirm-yes');
 let accountToDelete = null;
+const taxAssocList = document.getElementById('tax-assoc-list');
+const assocBtn = document.getElementById('assoc-tax-btn');
 
 const taxTbody = document.querySelector('#tax-table tbody');
 const taxModalEl = document.getElementById('taxModal');
@@ -45,6 +58,27 @@ function populateCurrencies() {
   });
 }
 
+function populateTaxOptions(selected = []) {
+  taxAssocList.innerHTML = '';
+  taxes.forEach(t => {
+    const div = document.createElement('div');
+    div.className = 'form-check';
+    const input = document.createElement('input');
+    input.className = 'form-check-input';
+    input.type = 'checkbox';
+    input.id = `tax-${t.id}`;
+    input.value = t.id;
+    if (selected.includes(t.id)) input.checked = true;
+    const label = document.createElement('label');
+    label.className = 'form-check-label';
+    label.setAttribute('for', input.id);
+    label.textContent = t.name;
+    div.appendChild(input);
+    div.appendChild(label);
+    taxAssocList.appendChild(div);
+  });
+}
+
   addBtn.addEventListener('click', () => {
     form.reset();
     populateCurrencies();
@@ -53,6 +87,7 @@ function populateCurrencies() {
     colorInput.value = '#000000';
     colorBtn.style.color = '#000000';
     modalTitle.textContent = 'Nueva cuenta';
+    populateTaxOptions();
     accModal.show();
   });
 
@@ -90,6 +125,9 @@ form.addEventListener('submit', async e => {
   if (result.ok) {
     alertBox.classList.add('alert-success');
     alertBox.textContent = 'Cuenta guardada';
+    if (result.account && !idField.value) {
+      idField.value = result.account.id;
+    }
     tbody.innerHTML = '';
     await loadAccounts();
   } else {
@@ -104,7 +142,7 @@ async function loadAccounts() {
 }
 
 
-function startEdit(acc) {
+async function startEdit(acc) {
   form.reset();
   populateCurrencies();
   form.name.value = acc.name;
@@ -116,6 +154,9 @@ function startEdit(acc) {
   colorBtn.style.color = color;
   alertBox.classList.add('d-none');
   modalTitle.textContent = 'Editar cuenta';
+  const accountTaxes = await fetchAccountTaxes(acc.id);
+  const selected = accountTaxes.map(t => t.id);
+  populateTaxOptions(selected);
   accModal.show();
 }
 
@@ -210,6 +251,29 @@ taxConfirmBtn.addEventListener('click', async () => {
     alert(result.error || 'Error al eliminar');
   }
   taxToDelete = null;
+});
+
+assocBtn.addEventListener('click', async () => {
+  if (!idField.value) {
+    alertBox.classList.remove('d-none', 'alert-success');
+    alertBox.classList.add('alert-danger');
+    alertBox.textContent = 'Guarde la cuenta antes de asociar impuestos';
+    return;
+  }
+  const selected = Array.from(
+    taxAssocList.querySelectorAll('input[type="checkbox"]:checked')
+  ).map(i => Number(i.value));
+  showOverlay();
+  const result = await setAccountTaxes(idField.value, selected);
+  hideOverlay();
+  alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+  if (result.ok) {
+    alertBox.classList.add('alert-success');
+    alertBox.textContent = 'Impuestos asociados';
+  } else {
+    alertBox.classList.add('alert-danger');
+    alertBox.textContent = result.error || 'Error al guardar';
+  }
 });
 
 loadAccounts();

@@ -34,7 +34,10 @@ export async function createAccount(payload) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
-  if (res.ok) return { ok: true };
+  if (res.ok) {
+    const account = await res.json();
+    return { ok: true, account };
+  }
   let error = 'Error al guardar';
   try {
     const data = await res.json();
@@ -49,7 +52,10 @@ export async function updateAccount(id, payload) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
-  if (res.ok) return { ok: true };
+  if (res.ok) {
+    const account = await res.json();
+    return { ok: true, account };
+  }
   let error = 'Error al guardar';
   try {
     const data = await res.json();
@@ -108,6 +114,26 @@ export async function deleteTax(id) {
   const res = await fetch(`/taxes/${id}`, { method: 'DELETE' });
   if (res.ok) return { ok: true };
   let error = 'Error al eliminar';
+  try {
+    const data = await res.json();
+    error = data.detail || error;
+  } catch (_) {}
+  return { ok: false, error };
+}
+
+export async function fetchAccountTaxes(id) {
+  const res = await fetch(`/accounts/${id}/taxes`);
+  return res.json();
+}
+
+export async function setAccountTaxes(id, taxIds) {
+  const res = await fetch(`/accounts/${id}/taxes`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tax_ids: taxIds })
+  });
+  if (res.ok) return { ok: true };
+  let error = 'Error al guardar';
   try {
     const data = await res.json();
     error = data.detail || error;
