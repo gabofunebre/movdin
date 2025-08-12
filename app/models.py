@@ -65,6 +65,15 @@ class Transaction(Base):
     account = relationship("Account", back_populates="transactions")
 
 
+class FrequentTransaction(Base):
+    __tablename__ = "frequent_transactions"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
 class Tax(Base):
     __tablename__ = "taxes"
     id: Mapped[int] = mapped_column(primary_key=True)
