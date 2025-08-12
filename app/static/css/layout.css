@@ -13,7 +13,9 @@ body {
 }
 
 #tx-table .col-date {
+
   width: 10ch;
+
 }
 
 #tx-table .col-desc {
@@ -21,11 +23,13 @@ body {
 }
 
 #tx-table .col-amount {
+
   width: 18ch;
 }
 
 #tx-table .col-account {
   width: 12ch;
+
 }
 
 #tx-table tbody tr {
