@@ -11,9 +11,12 @@
 <body class="d-flex flex-column min-vh-100">
   <header class="navbar navbar-light bg-light py-3 px-2 justify-content-center position-relative">
     <button id="menu-button" class="navbar-toggler position-absolute p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
-      <img src="/static/images/TA_logo_sqr.png" alt="Menú" id="menu-logo">
+      <span class="navbar-toggler-icon"></span>
     </button>
     <h1 class="h3 m-0">{{ header_title }}</h1>
+    <a href="/" id="logo-link" class="position-absolute">
+      <img src="/static/images/TA_logo_sqr.png" alt="Logo">
+    </a>
   </header>
   <div class="offcanvas offcanvas-start" tabindex="-1" id="sideMenu" aria-labelledby="sideMenuLabel">
     <div class="offcanvas-header">
